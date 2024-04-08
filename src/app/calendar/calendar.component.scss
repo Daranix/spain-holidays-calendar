@@ -1,0 +1,54 @@
+.day {
+
+    @apply pt-1 pb-1 text-center text-gray-900 bg-white;
+
+    &.day-inactive {
+        @apply text-gray-400 bg-gray-50;
+    }
+
+    time {
+        @apply rounded-full justify-center items-center w-7 h-7 flex ml-auto mr-auto;
+
+        &.fnacional {
+            @apply bg-green-700 text-white;
+        }
+
+        &.fregional {
+            @apply bg-blue-600 text-white;
+        }
+
+        &.fprovincial {
+            @apply bg-purple-600 text-white;
+        }
+    }
+    
+    &:first-child {
+        @apply rounded-tl-md;
+    }
+
+    &:nth-child(7) {
+        @apply rounded-tr-md;
+    }
+
+    &:nth-last-child(7) {
+        @apply rounded-bl-md;
+    }
+}
+
+.list-festivos {
+    .fnacional {
+        @apply text-green-700;
+    }
+
+    .fregional {
+        @apply text-blue-600;
+    }
+
+    .fprovincial {
+        @apply text-purple-600;
+    }
+
+    .festivo {
+        @apply font-semibold;
+    }
+}

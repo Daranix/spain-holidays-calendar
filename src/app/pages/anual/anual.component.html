@@ -1,0 +1,14 @@
+
+
+<div class="flex flex-col justify-center">
+    <h1 class="font-bold text-center mt-6 mb-2 text-4xl">Calendario Festivos {{ provincia() | titlecase }} - {{ year() }}</h1>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none pl-6 pr-6 pt-16 pb-16 gap-y-16 gap-x-6" *ngIf="festivos$ | async">
+
+        @for(month of meses; track idx; let idx = $index) {
+            <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivos()![meses[idx]]"></app-calendar>
+        }
+
+    </div>
+
+
+</div>

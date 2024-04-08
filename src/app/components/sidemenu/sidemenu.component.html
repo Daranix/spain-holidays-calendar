@@ -1,0 +1,24 @@
+<div class="flex h-full flex-col justify-between border-e bg-white">
+    <div class="px-4 py-6">
+
+        <ul class="mt-6 space-y-1">
+            <li>
+                <a routerLink="/" class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                    Inicio
+                </a>
+            </li>
+            <hr class="mt-4 mb-4"/>
+            @for(provincia of provincias(); track provincia.id) {
+                <li>
+                    <a [routerLink]="['/festivos', provincia.id, currentYear]"
+                        class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                        {{ provincia.label }}
+                    </a>
+                </li>
+            }
+
+
+        </ul>
+    </div>
+
+</div>
