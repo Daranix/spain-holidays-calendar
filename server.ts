@@ -3,10 +3,9 @@ import { CommonEngine } from '@angular/ssr';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import * as trpcExpress from '@trpc/server/adapters/express';
 import bootstrap from './src/main.server';
-import { appRouter, createContext } from '@/server/application/trpc';
 import { HOST_URL } from './shared/di/tokens';
+import { router } from './server/application/api';
 
 
 
@@ -24,11 +23,7 @@ export async function app(): Promise<express.Express> {
   // Example Express Rest API endpoints
   server.use(
     '/api',
-    trpcExpress.createExpressMiddleware({
-      router: appRouter,
-      createContext,
-      batching: { enabled: true }
-    })
+    router
   );
 
   // Serve static files from /browser

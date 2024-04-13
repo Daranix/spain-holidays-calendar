@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { addDays, lastDayOfMonth, subDays } from 'date-fns';
-import { DiaFestivo, meses } from '@/shared/models/common';
+import { meses } from '@/shared/models/common';
+import { DiaFestivo } from '@/shared/models/output/find-festivos-provincia.response';
 
 @Component({
   selector: 'app-calendar',

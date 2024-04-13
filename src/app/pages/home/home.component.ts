@@ -1,11 +1,11 @@
 import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { MapComponent } from '../../components/map/map.component';
-import { TRPCClientService } from '@/app/services/trpc-client/trpc-client.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
+import { RestClientService } from '@/app/services/rest-client/rest-client.service';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +15,6 @@ import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
     FormsModule
   ],
   providers: [
-    TRPCClientService
   ],
 
   templateUrl: './home.component.html',
@@ -24,13 +23,13 @@ import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
 export class HomeComponent {
 
   readonly isNative = Capacitor.isNativePlatform();
-  currentYear = new Date().getFullYear();
-  trpcClient = inject(TRPCClientService);
-  router = inject(Router);
-  provincias$ = this.trpcClient.getProvincias();
-  provincias = toSignal(this.provincias$);
-  years = toSignal(this.trpcClient.getYears());
-  selectedValues = signal({
+  readonly currentYear = new Date().getFullYear();
+  private readonly restClient = inject(RestClientService);
+  private readonly router = inject(Router);
+  readonly provincias$ = this.restClient.getProvincias();
+  readonly provincias = toSignal(this.provincias$);
+  readonly years = toSignal(this.restClient.getYears());
+  readonly selectedValues = signal({
     year: this.currentYear,
     provincia: ''
   });

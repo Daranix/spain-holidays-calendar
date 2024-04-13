@@ -1,6 +1,6 @@
 import { CalendarComponent } from '@/app/calendar/calendar.component';
+import { RestClientService } from '@/app/services/rest-client/rest-client.service';
 import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
-import { TRPCClientService } from '@/app/services/trpc-client/trpc-client.service';
 import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { meses } from '@/shared/models/common';
 import { CommonModule, TitleCasePipe } from '@angular/common';
@@ -30,14 +30,14 @@ export class AnualComponent {
 
   private readonly topNavbarService = inject(TopNavbarService);
   private readonly activeRouter = inject(ActivatedRoute);
-  private readonly trpcService = inject(TRPCClientService);
+  private readonly restClient = inject(RestClientService);
   private readonly titleCasePipe = inject(TitleCasePipe);
   readonly year = toSignal(this.activeRouter.paramMap.pipe(map((v) => Number.parseInt(v.get('year')!))), { initialValue: Number.parseInt(this.activeRouter.snapshot.paramMap.get('year')!) })
   readonly provincia = toSignal(this.activeRouter.paramMap.pipe(map((v) =>v.get('provincia')!)), { initialValue: this.activeRouter.snapshot.paramMap.get('provincia')! })
   readonly festivos$ = merge(
     toObservable(this.year),
     toObservable(this.provincia)
-  ).pipe(switchMap(() => this.trpcService.findFestivosProvincia(this.provincia(), this.year())))
+  ).pipe(switchMap(() => this.restClient.findFestivosProvincia({ provincia: this.provincia(), year: this.year() })))
   readonly festivos = toSignal(
     this.festivos$
   );

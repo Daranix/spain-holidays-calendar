@@ -1,7 +1,7 @@
-import { TRPCClientService } from '@/app/services/trpc-client/trpc-client.service';
+import { RestClientService } from '@/app/services/rest-client/rest-client.service';
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 
 @Component({
@@ -10,17 +10,14 @@ import { Capacitor } from '@capacitor/core';
   imports: [
     RouterModule
   ],
-  providers: [
-    TRPCClientService
-  ],
   templateUrl: './sidemenu.component.html',
   styleUrl: './sidemenu.component.scss'
 })
 export class SidemenuComponent {
 
-  private readonly trpcClient = inject(TRPCClientService);
+  private readonly restClient = inject(RestClientService);
   readonly isNative = Capacitor.isNativePlatform();
-  readonly provincias = toSignal(this.trpcClient.getProvincias());
+  readonly provincias = toSignal(this.restClient.getProvincias());
   readonly currentYear = new Date().getFullYear();
 
 }
