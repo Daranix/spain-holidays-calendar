@@ -1,7 +1,9 @@
 import { DOMParser } from "@xmldom/xmldom";
 import * as xpath from "xpath";
 import { capitalize, decodeHTMLEntities } from "../utils";
-import { DiaFestivo, Mes, TipoFestividad } from '@/shared/models/common';
+import { Mes, TipoFestividad } from '@/shared/models/common';
+import { DiaFestivo, FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
+import { FindProvinciasResponse } from "@/shared/models/output/find-provincias.response";
 
 const domParserArgs = {
     locator: {},
@@ -12,7 +14,8 @@ const domParserArgs = {
     }
 }
 
-export async function findFestivosProvincia(provincia: string, year: number) {
+export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
+    
     const response = await fetch(
         `https://www.calendarioslaborales.com/calendario-laboral-${provincia}-${year}.htm`,
     );
@@ -46,7 +49,7 @@ export async function findFestivosProvincia(provincia: string, year: number) {
     return Object.fromEntries(mapFestivos.entries());
 }
 
-export async function getProvincias() {
+export async function getProvincias(): Promise<FindProvinciasResponse> {
     const response = await fetch("https://www.calendarioslaborales.com/", {
         method: "GET",
     });
@@ -61,8 +64,8 @@ export async function getProvincias() {
 
     const provincias = elements.map((e) => {
         return {
-            id: e.getAttribute("value"),
-            label: e.firstChild?.nodeValue,
+            id: e.getAttribute("value")!,
+            label: e.firstChild!.nodeValue!,
         };
     });
 

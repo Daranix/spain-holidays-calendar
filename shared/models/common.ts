@@ -1,3 +1,5 @@
+import { Input, picklist } from "valibot";
+
 export const meses = [
     "enero",
     "febrero",
@@ -15,10 +17,7 @@ export const meses = [
 
 export type Mes = (typeof meses)[number];
 
-export interface DiaFestivo {
-    dia: number,
-    nameFestividad: string;
-    festividad: TipoFestividad;
-}
 
-export type TipoFestividad = 'regional' | 'provincial' | 'nacional';
+export const TipoFestividadSchema = picklist(['regional', 'provincial', 'nacional']);
+
+export type TipoFestividad = Input<typeof TipoFestividadSchema>;
