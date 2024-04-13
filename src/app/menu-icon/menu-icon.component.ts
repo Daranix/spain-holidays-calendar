@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class MenuIconComponent {
 
 
-  readonly toggleMenu = model<boolean>();
+  readonly toggleMenu = model<boolean>(false);
 
 
 }

@@ -26,7 +26,8 @@ export async function app(): Promise<express.Express> {
     '/api',
     trpcExpress.createExpressMiddleware({
       router: appRouter,
-      createContext
+      createContext,
+      batching: { enabled: true }
     })
   );
 

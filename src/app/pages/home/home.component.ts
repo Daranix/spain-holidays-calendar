@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
+import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
 
 @Component({
   selector: 'app-home',
@@ -34,8 +35,14 @@ export class HomeComponent {
     provincia: ''
   });
 
+  readonly topNavbarService = inject(TopNavbarService);
+
   async showFestivos(form: NgForm) {
     const { year, provincia } = form.value;
     await this.router.navigate(['festivos', provincia, year])
+  }
+
+  constructor() {
+    this.topNavbarService.title.set('Inicio');
   }
 }
