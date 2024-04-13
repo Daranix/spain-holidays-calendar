@@ -1,6 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID, inject } from "@angular/core";
 import { CreateTRPCProxyClient, createTRPCProxyClient, httpBatchLink } from "@trpc/client";
-import type { AppRouter } from '../../../server/application/trpc';
+import type { AppRouter } from '../../../../server/application/trpc';
 import { Observable, firstValueFrom, from } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { FetchEsque } from "@trpc/client/dist/internals/types";
@@ -8,7 +8,7 @@ import { CustomHttpResponse } from "./custom-http-response";
 import { DiaFestivo, Mes } from "@/shared/models/common";
 import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { Capacitor } from "@capacitor/core";
-import { environmnet } from "../environments/environment";
+import { environmnet } from "../../environments/environment";
 
 type TRPCClient = typeof createTRPCProxyClient<AppRouter>;
 @Injectable({ providedIn: 'root' })
@@ -34,7 +34,7 @@ export class TRPCClientService {
   private baseUrl(platformId: Object) {
     let url = '/api';
     if(isPlatformServer(platformId)) {
-      const envBaseUrl = process.env['BASE_URL'];
+      const envBaseUrl = process.env['BASE_URL'] || 'http://localhost:4200/api';
       if(!envBaseUrl) {
         throw new Error('BASE_URL env variable not specified')
       }

@@ -8,8 +8,10 @@ import bootstrap from './src/main.server';
 import { appRouter, createContext } from '@/server/application/trpc';
 import { HOST_URL } from './shared/di/tokens';
 
+
+
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
+export async function app(): Promise<express.Express> {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -28,12 +30,9 @@ export function app(): express.Express {
     })
   );
 
-  server.get('/api2/test', (req, res) => {
-    res.json({ user: 'Mercadona' })
-  });
   // Serve static files from /browser
   server.get('*.*', express.static(browserDistFolder, {
-    maxAge: 0
+    maxAge: process.env['NODE_ENV'] === 'dev' ? 0 : '10d'
   }));
 
   // All regular routes use the Angular engine
@@ -58,15 +57,21 @@ export function app(): express.Express {
   return server;
 }
 
-function run(): void {
+async function run() {
+  process.loadEnvFile();
   // biome-ignore lint/complexity/useLiteralKeys: Environment variables has to be accessed this way
   const port = process.env['PORT'] || 3000;
 
+
+
   // Start up the Node server
-  const server = app();
+  const server = await app();
+
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
+  
+
 }
 
 run();

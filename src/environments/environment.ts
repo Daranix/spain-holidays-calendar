@@ -1,3 +1,3 @@
 export const environment = {
-    textoPrueba: 'Hola mundo'
+    capacitorApiBaseUrl: undefined
 } as const;

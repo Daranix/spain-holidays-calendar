@@ -1,3 +1,3 @@
 export const environment = {
-    textoPrueba: 'Hola mundo'
+    capacitorApiBaseUrl: 'http://10.0.2.2:3000'
 } as const;

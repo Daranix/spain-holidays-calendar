@@ -1,9 +1,10 @@
 import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { MapComponent } from '../../components/map/map.component';
-import { TRPCClientService } from '@/app/services/trpc-client.service';
+import { TRPCClientService } from '@/app/services/trpc-client/trpc-client.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HomeComponent {
 
+  readonly isNative = Capacitor.isNativePlatform();
   currentYear = new Date().getFullYear();
   trpcClient = inject(TRPCClientService);
   router = inject(Router);

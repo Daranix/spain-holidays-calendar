@@ -1,9 +1,17 @@
 <div class="flex flex-col h-full">
-    <div class="w-full p-4 border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 sticky top-0 z-10" [hidden]="!isNative">
-        Top Navbar
-    </div>
-    <div class="grow flex">
-        <div class="w-48">
+    @if(isNative) {
+        <div class="w-full p-4 border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 sticky top-0 z-10 flex gap-2 align-middle items-center">
+            <div class="flex align-middle">
+                <app-menu-icon [(toggleMenu)]="showMenu" />
+            </div>
+            <div class="flex align-middle items-center">
+                <div>{{ topNavbarService.title() }}</div>
+            </div>
+        </div> 
+    }
+
+    <div class="grow md:flex">
+        <div class="w-full md:w-48 max-h-full overflow-auto lg:block fixed lg:static transition-transform md:translate-x-0" [ngClass]="{ '-translate-x-full': !showMenu(), 'translate-x-0': showMenu()  }">
             <app-sidemenu />
         </div>
         <div class="flex-1 h-full overflow-y-auto">
