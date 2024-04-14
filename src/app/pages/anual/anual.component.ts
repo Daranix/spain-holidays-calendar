@@ -45,10 +45,10 @@ export class AnualComponent {
   readonly meses = meses;
 
   constructor() {
-    this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`)
-    /*effect(() => {
+    this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`);
+    this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
       this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`)
-    }, {  });*/
+    });
   }
 
   getFestivos(idx: number) {

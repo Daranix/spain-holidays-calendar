@@ -10,19 +10,14 @@
     </div> 
     
 
-    <div class="grow lg:flex">
-        <div>
-            <div class="w-full md:w-48 max-h-full overflow-y-auto lg:block fixed lg:static transition-transform lg:translate-x-0 z-40" [ngClass]="{ '-translate-x-full': !showMenu(), 'translate-x-0': showMenu()  }">
-                <app-sidemenu />
-            </div>
+    <div class="grow lg:flex max-h-full flex-1">
+        <div class="flex-initial w-full md:w-48 max-h-screen overflow-y-auto lg:block fixed lg:static transition-transform lg:translate-x-0 z-40" [ngClass]="{ '-translate-x-full': !showMenu(), 'translate-x-0': showMenu()  }">
+            <app-sidemenu />
         </div>
 
 
-        <div class="flex-1 max-h-full overflow-y-auto">
-
-            <div class="w-full max-h-full">
-                <router-outlet />
-            </div>
+        <div class="w-full lg:max-h-screen overflow-auto">
+            <router-outlet />
         </div>
     </div>
 </div>
