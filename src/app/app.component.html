@@ -1,4 +1,4 @@
-<div class="flex flex-col max-h-full">
+<div class="flex flex-col h-full max-h-full">
 
     <div class="lg:hidden w-full p-4 border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 sticky top-0 z-50 flex gap-2 align-middle items-center max-h-full">
         <div class="flex align-middle">
@@ -10,13 +10,13 @@
     </div> 
     
 
-    <div class="grow lg:flex max-h-full flex-1">
-        <div class="flex-initial w-full md:w-48 max-h-screen overflow-y-auto lg:block fixed lg:static transition-transform lg:translate-x-0 z-40" [ngClass]="{ '-translate-x-full': !showMenu(), 'translate-x-0': showMenu()  }">
+    <div class="block lg:flex flex-1 h-full">
+            
+        <div class="flex-1 lg:flex-initial max-h-full overflow-y-auto lg:block fixed lg:static transition-transform lg:translate-x-0 z-40" [ngClass]="{ '-translate-x-full': !showMenu(), 'translate-x-0': showMenu()  }">
             <app-sidemenu />
         </div>
 
-
-        <div class="w-full lg:max-h-screen overflow-auto">
+        <div class="lg:flex-1 w-full max-h-full h-full overflow-y-auto">
             <router-outlet />
         </div>
     </div>
