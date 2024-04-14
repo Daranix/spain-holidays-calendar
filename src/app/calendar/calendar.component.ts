@@ -36,7 +36,7 @@ export class CalendarComponent {
       baseDate = subDays(baseDate, 1);
       dateFill.push(baseDate)
     }
-    return dateFill;
+    return dateFill.reverse();
   });
 
   daysInMonth = computed(

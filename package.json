@@ -6,7 +6,7 @@
     "build": "ng build --configuration production && capacitor sync",
     "build:dev": "ng build --configuration development",
     "watch": "npm run build:dev -- --configuration development --watch",
-    "dev": "ng serve --host 0.0.0.0 --disable-host-check --proxy-config proxy.conf.json",
+    "dev": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "dev:ssr:watch": "concurrently \"npm run watch\" \"nodemon --watch dist/server dist/server/server.mjs\"",
     "dev:ssr": "ng serve-ssr",
     "android:dev": "npm run build:dev && capacitor sync android && capacitor run android --external && npm start",
