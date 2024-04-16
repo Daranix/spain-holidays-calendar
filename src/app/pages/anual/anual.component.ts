@@ -1,14 +1,13 @@
 import { CalendarComponent } from '@/app/calendar/calendar.component';
 import { RestClientService } from '@/app/services/rest-client/rest-client.service';
 import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
-import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { meses } from '@/shared/models/common';
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { Component, computed, effect, inject } from '@angular/core';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { auditTime, combineLatest, debounceTime, distinctUntilChanged, exhaustMap, filter, forkJoin, map, merge, shareReplay, startWith, switchMap, takeUntil, tap } from 'rxjs';
+import { map, shareReplay, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-anual',
@@ -43,7 +42,8 @@ export class AnualComponent {
   );
 
   readonly festivos = toSignal(
-    this.festivos$
+    this.festivos$,
+    { initialValue: {} },
   );
 
   readonly meses = meses;

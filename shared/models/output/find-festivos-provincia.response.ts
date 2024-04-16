@@ -1,5 +1,5 @@
-import { number, object, record, string, Input, array } from "valibot";
-import { TipoFestividadSchema } from "../common";
+import { number, object, record, string, Input, array, picklist } from "valibot";
+import { TipoFestividadSchema, meses } from "../common";
 
 
 const DiaFestivoSchema = object({
@@ -8,7 +8,7 @@ const DiaFestivoSchema = object({
     festividad: TipoFestividadSchema
 });
 
-const FindFestivosProvinciaResponseSchema = record(string(), array(DiaFestivoSchema));
+const FindFestivosProvinciaResponseSchema = record(picklist(meses), array(DiaFestivoSchema));
 
 export type DiaFestivo = Input<typeof DiaFestivoSchema>;
 export type FindFestivosProvinciaResponse = Input<typeof FindFestivosProvinciaResponseSchema>;
