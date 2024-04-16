@@ -15,21 +15,21 @@ import { DiaFestivo } from '@/shared/models/output/find-festivos-provincia.respo
 })
 export class CalendarComponent {
 
-  festivos = input.required<Array<DiaFestivo>>();
-  year = input.required<number>();
-  month = input.required<number>();
+  readonly festivos = input.required<Array<DiaFestivo>>();
+  readonly year = input.required<number>();
+  readonly month = input.required<number>();
   
-  festivosGroupByDay = computed(() => {
+  readonly festivosGroupByDay = computed(() => {
     const festividad: Array<[number, { tipo: string; nombre: string }]> = this.festivos().map(({ dia, nameFestividad, festividad }) => [dia, { tipo: festividad, nombre: nameFestividad }]);
     const result = Object.fromEntries(festividad) satisfies Record<number, { tipo: string, nombre: string }>;
     return result;
   });
 
-  monthName = computed(() => meses[this.month()-1]);
+  readonly monthName = computed(() => meses[this.month()-1]);
 
-  private startDate = computed(() => new Date(this.year(), this.month()-1));
+  private readonly startDate = computed(() => new Date(this.year(), this.month()-1));
   
-  daysToFillStartWeek = computed(() => {
+  readonly daysToFillStartWeek = computed(() => {
     let baseDate = this.startDate();
     const dateFill: Array<Date> = [];
     while(baseDate.getDay() !== 1) {
@@ -39,11 +39,13 @@ export class CalendarComponent {
     return dateFill.reverse();
   });
 
-  daysInMonth = computed(
-    () => new Array(lastDayOfMonth(this.startDate()).getDate()).fill(null).map((v, i) => new Date(this.year(), this.month() - 1, i+1))
+  readonly daysInMonth = computed(
+    () => new Array(lastDayOfMonth(this.startDate()).getDate())
+                .fill(null)
+                .map((v, i) => new Date(this.year(), this.month() - 1, i+1))
   );
 
-  daysToFillEnd = computed(() => {
+  readonly daysToFillEnd = computed(() => {
     
     const daysNumber = (7*6) - (this.daysToFillStartWeek().length + this.daysInMonth().length)
     let baseDate = lastDayOfMonth(this.startDate());

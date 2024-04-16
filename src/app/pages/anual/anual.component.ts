@@ -8,7 +8,7 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { map, merge, switchMap } from 'rxjs';
+import { auditTime, combineLatest, debounceTime, distinctUntilChanged, exhaustMap, filter, forkJoin, map, merge, shareReplay, startWith, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-anual',
@@ -32,12 +32,16 @@ export class AnualComponent {
   private readonly activeRouter = inject(ActivatedRoute);
   private readonly restClient = inject(RestClientService);
   private readonly titleCasePipe = inject(TitleCasePipe);
+
+
   readonly year = toSignal(this.activeRouter.paramMap.pipe(map((v) => Number.parseInt(v.get('year')!))), { initialValue: Number.parseInt(this.activeRouter.snapshot.paramMap.get('year')!) })
-  readonly provincia = toSignal(this.activeRouter.paramMap.pipe(map((v) =>v.get('provincia')!)), { initialValue: this.activeRouter.snapshot.paramMap.get('provincia')! })
-  readonly festivos$ = merge(
-    toObservable(this.year),
-    toObservable(this.provincia)
-  ).pipe(switchMap(() => this.restClient.findFestivosProvincia({ provincia: this.provincia(), year: this.year() })))
+  readonly provincia = toSignal(this.activeRouter.paramMap.pipe(map((v) => v.get('provincia')!.split('-').join(' '))), { initialValue: this.activeRouter.snapshot.paramMap.get('provincia')!.split('-').join(' ') })
+  readonly festivos$ = this.activeRouter.params.pipe(
+    switchMap(({ year, provincia }) => this.restClient.findFestivosProvincia({ provincia, year })),
+    shareReplay(1),
+    takeUntilDestroyed()
+  );
+
   readonly festivos = toSignal(
     this.festivos$
   );
@@ -49,9 +53,7 @@ export class AnualComponent {
     this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
       this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`)
     });
+
   }
 
-  getFestivos(idx: number) {
-    return this.festivos()?.[meses[idx]] || [];
-  }
 }

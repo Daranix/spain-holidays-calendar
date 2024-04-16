@@ -1,13 +1,13 @@
 <div>
     <h2 class="text-center font-semibold text-gray-900">{{ monthName() | titlecase }}</h2>
     <div class="grid grid-cols-7 ">
-        <div class="text-center text-gray-500">L</div>
-        <div class="text-center text-gray-500">M</div>
-        <div class="text-center text-gray-500">X</div>
-        <div class="text-center text-gray-500">J</div>
-        <div class="text-center text-gray-500">V</div>
-        <div class="text-center text-gray-500">S</div>
-        <div class="text-center text-gray-500">D</div>
+        <div class="text-center text-gray-500">Lunes</div>
+        <div class="text-center text-gray-500">Martes</div>
+        <div class="text-center text-gray-500">Miercoles</div>
+        <div class="text-center text-gray-500">Jueves</div>
+        <div class="text-center text-gray-500">Viernes</div>
+        <div class="text-center text-gray-500">Sabado</div>
+        <div class="text-center text-gray-500">Domingo</div>
     </div>
     <div class="grid grid-cols-7 gap-[1px] bg-gray-200 mt-2 border shadow rounded-lg">
 
@@ -19,7 +19,7 @@
 
         @for(day of daysInMonth(); track $index) {
             <div class="day">
-                <time [dateTime]="day | date:'yyyy-MM-dd'" [ngClass]="applyFestividadStyle(day.getDate())">{{ day.getDate() }}</time>
+                <time [attr.title]="festivosGroupByDay()?.[day.getDate()]?.nombre || null" [dateTime]="day | date:'yyyy-MM-dd'" [ngClass]="applyFestividadStyle(day.getDate())">{{ day.getDate() }}</time>
             </div>
         }
 

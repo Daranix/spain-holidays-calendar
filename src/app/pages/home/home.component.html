@@ -1,4 +1,5 @@
-<div>
+<main>
+    
     <!--
     <app-map />
     -->
@@ -8,25 +9,31 @@
                 <div class="text-center">
                     <p class="text-lg font-medium leading-8 text-indigo-600/95">Encuentra los festivos de tu Provincia</p>
                     <h1 class="mt-3 text-[3.5rem] font-bold leading-[4rem] tracking-tight text-black">Calendario Laboral de Festivos {{ currentYear }}</h1>
+                    <!--
                     <p class="mt-3 text-lg leading-relaxed text-slate-400">Utilizamos fuentes de datos oficiales para proporcionarte detallados los festivos en tu provincia.</p>
+                    -->
                 </div>
-    
+                
+                <!--
                 <div class="mt-6 flex items-center justify-center gap-4 z-0">
                     <a href="#"
                         class="transform rounded-md bg-indigo-600/95 px-5 py-3 font-medium text-white transition-colors hover:bg-indigo-700">Ver mapa de provincias</a>
                 </div>
+                -->
             </div>
         </section>
 
         <div class="flex items-center justify-center w-full">
             <hr class="w-64 h-[3px] my-8 bg-gray-200 border-0 rounded dark:bg-gray-700">
-            <div class="absolute px-4 translate-x-1/2 bg-white left-1/2 dark:bg-gray-900">
+            <!--
+            <div class="absolute px-4 bg-white dark:bg-gray-900">
                 o
             </div>
+            -->
         </div>
     }
 
-    <div class="container mx-auto max-w-sm mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <section class="container mx-auto max-w-sm mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
         <form class="space-y-6" #festivosForm="ngForm" (ngSubmit)="showFestivos(festivosForm)">
             <h5 class="text-xl font-medium text-gray-900 dark:text-white text-center">Consulta los Festivos</h5>
             <div>
@@ -39,7 +46,7 @@
             </div>
             <div>
                 <label for="provincia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Provincia</label>
-                <select id="provincia" ngModel name="provincia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                <select id="provincia" required ngModel name="provincia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     @for (provincia of provincias(); track provincia.id; let idx = $index) {
                         <option [ngValue]="provincia.id" >{{ provincia.label }}</option>
                     }
@@ -47,12 +54,13 @@
             </div>
 
             <button type="submit"
-                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                [disabled]="festivosForm.form.invalid"
+                class="w-full text-white disabled:cursor-not-allowed disabled:opacity-75 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Buscar
             </button>
 
         </form>
-    </div>
+    </section>
 
 
-</div>
+</main>

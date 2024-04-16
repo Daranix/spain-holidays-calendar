@@ -1,1 +1,6 @@
 wtf: https://github.com/angular/angular-cli/issues/26323
+
+interesting things:
+
+https://justangular.com/blog/building-computed-async-for-signals-in-angulars
+https://justangular.com/blog/creating-reusable-router-signals-apis

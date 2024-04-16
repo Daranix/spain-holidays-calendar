@@ -20,6 +20,8 @@ export async function findFestivosProvincia(provincia: string, year: number): Pr
         `https://www.calendarioslaborales.com/calendario-laboral-${provincia}-${year}.htm`,
     );
 
+    console.log('Hola');
+
     const html = await response.text();
     const doc = new DOMParser(domParserArgs).parseFromString(html);
 
