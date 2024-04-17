@@ -31,8 +31,7 @@ jobs:
 
     - name: Build Android APK
       run: |
-        npx cap open android --wait
-        ./gradlew assembleDebug --stacktrace
+        ./gradlew assembleRelease
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
