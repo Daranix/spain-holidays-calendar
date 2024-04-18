@@ -39,6 +39,7 @@ jobs:
 
     - name: Move files
       run: |
+        mkdir -p build/outputs
         mv android/app/build/outputs/apk/release/app-release-unsigned.apk build/outputs/app-release.apk
         mv android/app/build/outputs/bundle/release/app-release.aab build/outputs/app-release.aab
     
