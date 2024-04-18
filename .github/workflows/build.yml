@@ -39,14 +39,14 @@ jobs:
 
     - name: Move files
       run: |
-        mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/app-release.apk
-        mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/app-release.aab
+        mv android/app/build/outputs/apk/release/app-release-unsigned.apk build/outputs/app-release.apk
+        mv android/app/build/outputs/bundle/release/app-release.aab build/outputs/app-release.aab
     
     - name: Sign Apk File
       id: sign_app
       uses: ilharp/sign-android-release@v1.0.4
       with:
-        releaseDir: app/build/outputs
+        releaseDir: build/outputs
         signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
         keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
         keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
