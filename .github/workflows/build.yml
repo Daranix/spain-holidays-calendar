@@ -35,6 +35,24 @@ jobs:
         cd android
         chmod +x ./gradlew
         ./gradlew assembleRelease
+        ./gradlew bundleRelease
+
+    - name: Move files
+      if: ${{ steps.regex-match.outputs.match != '' }}
+      run: |
+        mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/app-release.apk
+        mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/app-release.aab
+    
+    - name: Sign Apk File
+      if: ${{ steps.regex-match.outputs.match != '' }}
+      id: sign_app
+      uses: ilharp/sign-android-release@v1.0.4
+      with:
+        releaseDir: app/build/outputs
+        signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
+        keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
+        keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
     - name: Package dist folder
       run: zip -r dist.zip dist
@@ -45,6 +63,7 @@ jobs:
       with:
         draft: true
         files: |
-          android/app/build/outputs/apk/release/app-release-unsigned.apk
+          app/build/outputs/app-release.apk
+          app/build/outputs/app-release.aab
           dist.zip
 
