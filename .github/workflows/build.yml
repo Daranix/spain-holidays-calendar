@@ -38,13 +38,11 @@ jobs:
         ./gradlew bundleRelease
 
     - name: Move files
-      if: ${{ steps.regex-match.outputs.match != '' }}
       run: |
         mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/app-release.apk
         mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/app-release.aab
     
     - name: Sign Apk File
-      if: ${{ steps.regex-match.outputs.match != '' }}
       id: sign_app
       uses: ilharp/sign-android-release@v1.0.4
       with:
