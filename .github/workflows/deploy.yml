@@ -10,6 +10,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   APP_NAME: spain-holidays-calendar
+  FLY_API_TOKEN:  ${{ secrets.FLY_API_TOKEN }}
     
 
 jobs:
@@ -72,12 +73,9 @@ jobs:
       # against the sigstore community Fulcio instance.
       run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
-    - name: Login to Fly.io
-      uses: superfly/flyctl-actions@v0.2.0
-      with:
-        token: ${{ secrets.FLY_API_TOKEN }}
+    - name: Setup flyctl
+      uses: superfly/flyctl-actions/setup-flyctl@master
 
-        
     - name: Deploy to Fly.io
       run: |
         flyctl deploy -i ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }} --app spain-holidays-calendar
