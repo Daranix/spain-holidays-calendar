@@ -2,7 +2,7 @@ name: Deploy Docker to Fly.io
 
 on:
   release:
-    types: [released]
+    types: [published]
 
 env:
   # Use docker.io for Docker Hub if empty
