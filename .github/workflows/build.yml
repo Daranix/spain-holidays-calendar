@@ -62,7 +62,7 @@ jobs:
       with:
         draft: true
         files: |
-          build/outputs/app-release.apk
-          build/outputs/app-release.aab
+          build/outputs/app-release-signed.apk
+          build/outputs/app-release-signed.aab
           dist.zip
 
