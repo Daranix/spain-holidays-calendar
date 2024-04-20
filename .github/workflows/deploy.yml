@@ -28,7 +28,7 @@ jobs:
         curl -sL -o dist.zip "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/dist.zip"
 
     - name: Unzip dist.zip
-      run: unzip dist.zip -d dist
+      run: unzip dist.zip -d ./
 
     - name: Install cosign
       uses: sigstore/cosign-installer@v3
