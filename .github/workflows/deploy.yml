@@ -69,15 +69,6 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-
-    - name: Sign the published Docker image
-      env:
-        TAGS: ${{ steps.image_fullname.outputs.lowercase_name }}:latest,${{ steps.image_fullname.outputs.lowercase_name }}:${{ github.event.release.tag_name }}
-        DIGEST: ${{ steps.build-and-push.outputs.digest }}
-      # This step uses the identity token to provision an ephemeral certificate
-      # against the sigstore community Fulcio instance.
-      run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-
     - name: Setup flyctl
       uses: superfly/flyctl-actions/setup-flyctl@master
 
