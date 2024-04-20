@@ -74,5 +74,5 @@ jobs:
 
     - name: Deploy to Fly.io
       run: |
-        flyctl deploy -i ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }} --app spain-holidays-calendar
+        flyctl deploy -i ${{ steps.image_fullname.outputs.lowercase_name }}:${{ github.event.release.tag_name }} --app spain-holidays-calendar
     

@@ -54,7 +54,13 @@ export async function app(): Promise<express.Express> {
 }
 
 async function run() {
-  process.loadEnvFile();
+  
+  try {
+    process.loadEnvFile();
+  } catch(ex) {
+    console.warn('.env file not found');
+  }
+  
   // biome-ignore lint/complexity/useLiteralKeys: Environment variables has to be accessed this way
   const port = process.env['PORT'] || 3000;
 
