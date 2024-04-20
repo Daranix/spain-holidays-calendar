@@ -45,11 +45,18 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract image full name lowercase
+      id: image_fullname
+      run: |
+        full_name=$(echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
+        echo "Lowercase fullname: $full_name"
+        echo "::set-output name=lowercase_name::$full_name"
+
     - name: Extract Docker metadata
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ steps.image_fullname.outputs.lowercase_name }}
 
     - name: Build and push Docker image
       id: build-and-push
@@ -57,7 +64,7 @@ jobs:
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
+        tags: ${{ steps.image_fullname.outputs.lowercase_name }}:latest,${{ steps.image_fullname.outputs.lowercase_name }}:${{ github.event.release.tag_name }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -65,7 +72,7 @@ jobs:
 
     - name: Sign the published Docker image
       env:
-        TAGS: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
+        TAGS: ${{ steps.image_fullname.outputs.lowercase_name }}:latest,${{ steps.image_fullname.outputs.lowercase_name }}:${{ github.event.release.tag_name }}
         DIGEST: ${{ steps.build-and-push.outputs.digest }}
       # This step uses the identity token to provision an ephemeral certificate
       # against the sigstore community Fulcio instance.
