@@ -36,3 +36,49 @@ export function decodeHTMLEntities(text: string) {
         return entity;
     });
 }
+
+export function stringToMilliseconds(input: string): number {
+    // Regular expression to match the input string
+    const regex = /^(\d+)([smhd])$/;
+    
+    // Execute the regex on the input string
+    const match = input.match(regex);
+    
+    // If the input doesn't match the expected format, return null
+    if (!match) {
+        throw new Error(`Invalid string to transform into miliseconds: ${input}`)
+    }
+    
+    // Extract the numerical value and unit from the match
+    const value = Number.parseInt(match[1]);
+    const unit = match[2];
+    
+    // Calculate the milliseconds based on the unit
+    let milliseconds: number;
+    switch (unit) {
+        case 's':
+            milliseconds = value * 1000;
+            break;
+        case 'm':
+            milliseconds = value * 1000 * 60;
+            break;
+        case 'h':
+            milliseconds = value * 1000 * 60 * 60;
+            break;
+        case 'd':
+            milliseconds = value * 1000 * 60 * 60 * 24;
+            break;
+        default:
+            throw new Error(`Invalid string to transform into miliseconds: ${input}`);
+    }
+    
+    return milliseconds;
+}
+
+export class HttpError extends Error {
+
+    constructor(public override message: string, public statusCode: number, public opts?: { originalException: unknown }) {
+        super(message);
+    }
+
+}

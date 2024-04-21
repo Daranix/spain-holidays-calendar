@@ -6,7 +6,9 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import { HOST_URL } from './shared/di/tokens';
 import { router } from './server/application/api';
-
+import { generateSiteMap } from './server/infrastructure/generator-sitemap';
+import { MemoryCacheStorage } from './server/infrastructure/cache-manager';
+import { stringToMilliseconds } from './server/utils';
 
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -25,6 +27,14 @@ export async function app(): Promise<express.Express> {
     '/api',
     router
   );
+
+  server.get('/sitemap.xml', async (req, res) => {
+    const sitemapCacheTime = stringToMilliseconds('10d'); // 10d
+    const sitemap = MemoryCacheStorage.register('', () => generateSiteMap(), sitemapCacheTime);
+    res.setHeader('Content-Type', 'text/xml');
+    res.write(sitemap);
+    res.end();
+  })
 
   // Serve static files from /browser
   server.get('*.*', express.static(browserDistFolder, {

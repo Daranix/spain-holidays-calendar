@@ -16,35 +16,35 @@ export class RestClientService {
 
   private readonly httpClient = inject(HttpClient);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly BASE_URL = this.baseUrl(this.platformId);
+  private readonly API_BASE_URL = this.baseUrl(this.platformId);
 
   // biome-ignore lint/complexity/noBannedTypes: <explanation>
   private baseUrl(platformId: Object) {
     let url = '/api';
     if(isPlatformServer(platformId)) {
-      const envBaseUrl = process.env['BASE_URL'] || 'http://localhost:4200/api';
+      const envBaseUrl = `${process.env['BASE_URL']}/api` || 'http://localhost:4200/api';
       if(!envBaseUrl) {
         throw new Error('BASE_URL env variable not specified')
       }
       url = envBaseUrl;
     } else if(isPlatformBrowser(platformId) && Capacitor.isNativePlatform()) {
-      url = environmnet.capacitorApiBaseUrl;
+      url = `${environmnet.capacitorApiBaseUrl}/api`;
     }
     return url;
   }
   
   findFestivosProvincia({ provincia, year }: FindFestivosProvinciaRequest): Observable<FindFestivosProvinciaResponse> {
-    const url = (`${this.BASE_URL}/festivos/${provincia}/${year}`);
+    const url = (`${this.API_BASE_URL}/festivos/${provincia}/${year}`);
     return this.httpClient.get<FindFestivosProvinciaResponse>(url);
   }
 
   getYears(): Observable<FindYearResponse> {
-    const url = (`${this.BASE_URL}/years`)
+    const url = (`${this.API_BASE_URL}/years`)
     return this.httpClient.get<FindYearResponse>(url);
   }
 
   getProvincias(): Observable<FindProvinciasResponse> {
-    const url = (`${this.BASE_URL}/provincias`)
+    const url = (`${this.API_BASE_URL}/provincias`)
     return this.httpClient.get<FindProvinciasResponse>(url);
   }
 }

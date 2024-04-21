@@ -1,3 +1,3 @@
 export const environmnet = {
-    capacitorApiBaseUrl: '/api'
+    capacitorApiBaseUrl: 'https://www.calendariovacaciones.com'
 }

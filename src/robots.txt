@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://calendariovacaciones.com/sitemap.xml

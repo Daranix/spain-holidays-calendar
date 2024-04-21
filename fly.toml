@@ -9,8 +9,8 @@ kill_signal = 'SIGINT'
 kill_timeout = '5s'
 
 [env]
-  BASE_URL = "https://www.calendariovacaciones.com/api"
-  NODE_ENV = "prod"
+  BASE_URL = "https://www.calendariovacaciones.com"
+  NODE_ENV = "production"
 
 [http_service]
   internal_port = 3000
@@ -21,6 +21,6 @@ kill_timeout = '5s'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
+  memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1
