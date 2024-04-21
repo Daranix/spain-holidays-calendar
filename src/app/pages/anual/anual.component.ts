@@ -8,6 +8,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { map, shareReplay, switchMap } from 'rxjs';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-anual',
@@ -31,6 +32,8 @@ export class AnualComponent {
   private readonly activeRouter = inject(ActivatedRoute);
   private readonly restClient = inject(RestClientService);
   private readonly titleCasePipe = inject(TitleCasePipe);
+  private readonly titleService = inject(Title);
+  private readonly metadataService = inject(Meta);
 
 
   readonly year = toSignal(this.activeRouter.paramMap.pipe(map((v) => Number.parseInt(v.get('year')!))), { initialValue: Number.parseInt(this.activeRouter.snapshot.paramMap.get('year')!) })
@@ -51,7 +54,12 @@ export class AnualComponent {
   constructor() {
     this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`);
     this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`)
+      const text = `Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`
+      this.topNavbarService.title.set(text)
+      this.titleService.setTitle(text)
+      const description = `Listado de festivos ${this.titleCasePipe.transform(this.provincia())} año ${this.year()}`;
+      this.metadataService.updateTag({ property: 'og:description', content: description });
+      this.metadataService.updateTag({ name: 'description', content: description })
     });
 
   }

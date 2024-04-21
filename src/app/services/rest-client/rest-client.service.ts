@@ -22,7 +22,7 @@ export class RestClientService {
   private baseUrl(platformId: Object) {
     let url = '/api';
     if(isPlatformServer(platformId)) {
-      const envBaseUrl = `${process.env['BASE_URL']}/api` || 'http://localhost:4200/api';
+      const envBaseUrl = process.env['BASE_URL'] ? `${process.env['BASE_URL']}/api` : 'http://localhost:4200/api';
       if(!envBaseUrl) {
         throw new Error('BASE_URL env variable not specified')
       }
