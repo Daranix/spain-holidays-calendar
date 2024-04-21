@@ -30,7 +30,7 @@ export async function app(): Promise<express.Express> {
 
   server.get('/sitemap.xml', async (req, res) => {
     const sitemapCacheTime = stringToMilliseconds('10d'); // 10d
-    const sitemap = MemoryCacheStorage.register('', () => generateSiteMap(), sitemapCacheTime);
+    const sitemap = await MemoryCacheStorage.register('sitemap', () => generateSiteMap(), sitemapCacheTime);
     res.setHeader('Content-Type', 'text/xml');
     res.write(sitemap);
     res.end();

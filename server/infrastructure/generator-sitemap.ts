@@ -17,7 +17,7 @@ export async function generateSiteMap(): Promise<string> {
 
     for (const year of years) {
         for (const provincia of provincias) {
-            paths.push(`/festivos/${provincia}/${year}`);
+            paths.push(`/festivos/${provincia.id}/${year.year}`);
         }
     }
 

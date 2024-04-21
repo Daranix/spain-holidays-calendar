@@ -1,23 +1,25 @@
 
+import { MemoryCacheStorage } from '../infrastructure/cache-manager';
 import { findFestivosProvincia, getProvincias, getYears } from '../infrastructure/operations';
 import express from 'express';
+import { stringToMilliseconds } from '../utils';
 
 const router = express();
 
 router.get('/festivos/:provincia/:year', async (req, res) => {
   const { year, provincia } = req.params;
-
-  const festivos = await findFestivosProvincia(provincia, Number.parseInt(year));
+  const key = `${provincia}-${year}-festivos`;
+  const festivos = await MemoryCacheStorage.register(key, () => findFestivosProvincia(provincia, Number.parseInt(year)), stringToMilliseconds('10d'));
   res.json(festivos);
 });
 
 router.get('/years', async (req, res) => {
-  const years = await getYears();
+  const years = await MemoryCacheStorage.register('years', () => getYears(), stringToMilliseconds('10d'))
   res.json(years);
 });
 
 router.get('/provincias', async (req, res) => {
-  const provincias = await getProvincias();
+  const provincias = await MemoryCacheStorage.register('provincias', () => getProvincias(), stringToMilliseconds('10d'));
   res.json(provincias);
 });
 
