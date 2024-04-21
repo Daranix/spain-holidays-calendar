@@ -52,16 +52,21 @@ export class AnualComponent {
   readonly meses = meses;
 
   constructor() {
-    this.topNavbarService.title.set(`Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`);
+    this.updateMetadata();
     this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
-      const text = `Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`
-      this.topNavbarService.title.set(text)
-      this.titleService.setTitle(text)
-      const description = `Listado de festivos ${this.titleCasePipe.transform(this.provincia())} año ${this.year()}`;
-      this.metadataService.updateTag({ property: 'og:description', content: description });
-      this.metadataService.updateTag({ name: 'description', content: description })
+      this.updateMetadata();
     });
 
+  }
+
+  updateMetadata() {
+    const title = `Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`
+    this.topNavbarService.title.set(title);
+    this.titleService.setTitle(title);
+    this.metadataService.updateTag({ property: 'og:title', content: title });
+    const description = `Listado de festivos ${this.titleCasePipe.transform(this.provincia())} año ${this.year()}`;
+    this.metadataService.updateTag({ property: 'og:description', content: description });
+    this.metadataService.updateTag({ name: 'description', content: description })
   }
 
 }

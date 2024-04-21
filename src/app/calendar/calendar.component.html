@@ -33,7 +33,7 @@
     <div class="p-4">
         <ul class="list-festivos">
             @for(festivo of festivos(); track $index) {
-                <li><span [ngClass]="'festivo ' + applyFestividadStyle(festivo.dia)">{{ getDate(festivo.dia) | date:'dd' }}</span> - {{ festivo.nameFestividad }} - Festivo {{ festivo.festividad }}</li>
+                <li><time [dateTime]="getDate(festivo.dia) | date:'yyyy-MM-dd'"><span [ngClass]="'festivo ' + applyFestividadStyle(festivo.dia)">{{ getDate(festivo.dia) | date:'dd' }}</span> - {{ festivo.nameFestividad }} - Festivo {{ festivo.festividad }}</time></li>
             }
         </ul>
     </div>
