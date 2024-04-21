@@ -8,11 +8,12 @@
     "watch": "npm run build:dev -- --configuration development --watch",
     "dev": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "dev:ssr:watch": "concurrently \"npm run watch\" \"nodemon --watch dist/server dist/server/server.mjs\"",
-    "dev:ssr": "ng serve-ssr",
+    "dev:ssr": "nodemon --watch dist/server dist/server/server.mjs",
     "android:dev": "npm run build:dev && capacitor sync android && capacitor run android --external && npm start",
     "biome": "biome",
     "capacitor": "capacitor",
-    "ng": "ng"
+    "ng": "ng",
+    "generate-assets": "npx @capacitor/assets generate"
   },
   "private": true,
   "dependencies": {
@@ -45,6 +46,7 @@
     "@angular/cli": "^17.3.3",
     "@angular/compiler-cli": "^17.3.3",
     "@biomejs/biome": "1.6.4",
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^5.7.4",
     "@types/express": "^4.17.21",
     "@types/jasmine": "~5.1.4",
