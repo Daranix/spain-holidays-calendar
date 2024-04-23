@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MapComponent } from '../../components/map/map.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -28,7 +28,18 @@ export class HomeComponent {
   private readonly router = inject(Router);
   readonly provincias$ = this.restClient.getProvincias();
   readonly provincias = toSignal(this.provincias$);
-  readonly years = toSignal(this.restClient.getYears());
+  readonly years = toSignal(this.restClient.getYears(), { initialValue: [] });
+  readonly yearsGrouped = computed(() => {
+    const groups: Record<string, number[]> = {};
+    for (const year of this.years()) {
+      if(!groups[year.groupName]) {
+        groups[year.groupName] = [];
+      }
+      const yearList = groups[year.groupName]!;
+      yearList.push(year.year);
+    }
+    return Object.entries(groups);
+  });
   readonly selectedValues = signal({
     year: this.currentYear,
     provincia: ''

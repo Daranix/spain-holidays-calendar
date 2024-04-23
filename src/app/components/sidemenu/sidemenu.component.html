@@ -7,7 +7,9 @@
                     Inicio
                 </a>
             </li>
-            <hr class="mt-4 mb-4"/>
+            <li>
+                <hr class="mt-4 mb-4"/>
+            </li>
             @for(provincia of provincias(); track provincia.id) {
                 <li>
                     <a [routerLink]="['/festivos', provincia.id, currentYear]" routerLinkActive="bg-gray-100 text-gray-700"
