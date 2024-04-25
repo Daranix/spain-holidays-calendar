@@ -9,13 +9,16 @@ import { ActivatedRoute } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { map, shareReplay, switchMap } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
+import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
+import { SpinnerComponent } from '@/app/spinner/spinner.component';
 
 @Component({
   selector: 'app-anual',
   standalone: true,
   imports: [
     CalendarComponent,
-    CommonModule
+    CommonModule,
+    SpinnerComponent
   ],
   providers: [
     TitleCasePipe
@@ -39,14 +42,14 @@ export class AnualComponent {
   readonly year = toSignal(this.activeRouter.paramMap.pipe(map((v) => Number.parseInt(v.get('year')!))), { initialValue: Number.parseInt(this.activeRouter.snapshot.paramMap.get('year')!) })
   readonly provincia = toSignal(this.activeRouter.paramMap.pipe(map((v) => v.get('provincia')!.split('-').join(' '))), { initialValue: this.activeRouter.snapshot.paramMap.get('provincia')!.split('-').join(' ') })
   readonly festivos$ = this.activeRouter.params.pipe(
-    switchMap(({ year, provincia }) => this.restClient.findFestivosProvincia({ provincia, year })),
+    switchMap(({ year, provincia }) => this.restClient.findFestivosProvincia({ provincia, year }).pipe(loading())),
     shareReplay(1),
     takeUntilDestroyed()
   );
 
   readonly festivos = toSignal(
     this.festivos$,
-    { initialValue: {} },
+    { initialValue: LOADING_INITIAL_VALUE },
   );
 
   readonly meses = meses;

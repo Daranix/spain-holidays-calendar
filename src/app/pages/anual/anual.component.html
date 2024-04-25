@@ -6,14 +6,27 @@
         <h1 class="font-bold text-center mt-6 mb-2 text-4xl">Calendario Festivos {{ provincia() | titlecase }} - {{ year() }}</h1>
     }
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none pl-6 pr-6 pt-16 pb-16 gap-y-16 gap-x-6" *ngIf="festivos$ | async as festivosResponse">
+    @if(festivos().loading) {
+        <div class="w-full">
+            <app-spinner />
+        </div>
+    }
 
-        @for(month of meses; track idx; let idx = $index) {
+    @if(!festivos().loading && festivos().error) {
+        <div>Error al mostrar los resultados</div>
+    }
 
-            <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivosResponse[meses[idx]]!"></app-calendar>
-        }
+    @if(!festivos().loading && !festivos().error && festivos().data) {
 
-    </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none pl-6 pr-6 pt-16 pb-16 gap-y-16 gap-x-6">
+
+                @for(month of meses; track idx; let idx = $index) {
+                    <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivos().data![meses[idx]]!"></app-calendar>
+                }
+            
+
+        </div>
+    }
 
 
 </div>
