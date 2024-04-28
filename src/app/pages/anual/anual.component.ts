@@ -11,6 +11,7 @@ import { map, shareReplay, switchMap } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { SpinnerComponent } from '@/app/spinner/spinner.component';
+import { updateCanonnicalUrl } from '@/app/utils/common';
 
 @Component({
   selector: 'app-anual',
@@ -55,6 +56,7 @@ export class AnualComponent {
   readonly meses = meses;
 
   constructor() {
+    updateCanonnicalUrl();
     this.updateMetadata();
     this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
       this.updateMetadata();
