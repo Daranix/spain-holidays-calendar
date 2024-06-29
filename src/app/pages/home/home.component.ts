@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal } from '@angular/core';
 import { MapComponent } from '../../components/map/map.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -6,13 +6,15 @@ import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
 import { RestClientService } from '@/app/services/rest-client/rest-client.service';
+import { GoogleAdComponent } from '@/app/components/google-ad/google-ad.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     MapComponent,
-    FormsModule
+    FormsModule,
+    GoogleAdComponent
   ],
   providers: [
   ],
@@ -55,4 +57,5 @@ export class HomeComponent {
   constructor() {
     this.topNavbarService.title.set('Inicio');
   }
+
 }
