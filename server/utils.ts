@@ -22,12 +22,12 @@ export function decodeHTMLEntities(text: string) {
         if (entityCode in entities) {
             return entities[entityCode as keyof typeof entities];
         }
-        
+
         match = entityCode.match(/^#x([\da-fA-F]+)$/);
         if (match) {
             return String.fromCharCode(Number.parseInt(match[1], 16));
-        } 
-        
+        }
+
         match = entityCode.match(/^#(\d+)$/);
         if (match) {
             return String.fromCharCode(~~match[1]);
@@ -40,19 +40,19 @@ export function decodeHTMLEntities(text: string) {
 export function stringToMilliseconds(input: string): number {
     // Regular expression to match the input string
     const regex = /^(\d+)([smhd])$/;
-    
+
     // Execute the regex on the input string
     const match = input.match(regex);
-    
+
     // If the input doesn't match the expected format, return null
     if (!match) {
         throw new Error(`Invalid string to transform into miliseconds: ${input}`)
     }
-    
+
     // Extract the numerical value and unit from the match
     const value = Number.parseInt(match[1]);
     const unit = match[2];
-    
+
     // Calculate the milliseconds based on the unit
     let milliseconds: number;
     switch (unit) {
@@ -71,7 +71,7 @@ export function stringToMilliseconds(input: string): number {
         default:
             throw new Error(`Invalid string to transform into miliseconds: ${input}`);
     }
-    
+
     return milliseconds;
 }
 
