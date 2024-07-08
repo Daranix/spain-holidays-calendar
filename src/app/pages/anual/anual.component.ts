@@ -1,6 +1,6 @@
 import { CalendarComponent } from '@/app/calendar/calendar.component';
-import { RestClientService } from '@/app/services/rest-client/rest-client.service';
-import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
+import { RestClientService } from '@/app/services/rest-client.service';
+import { TopNavbarService } from '@/app/services/top-navbar.service';
 import { meses } from '@/shared/models/common';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
@@ -12,6 +12,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { SpinnerComponent } from '@/app/spinner/spinner.component';
 import { updateCanonnicalUrl } from '@/app/utils/common';
+import { MetadataService } from '@/app/services/metadata.service';
 
 @Component({
   selector: 'app-anual',
@@ -36,8 +37,7 @@ export class AnualComponent {
   private readonly activeRouter = inject(ActivatedRoute);
   private readonly restClient = inject(RestClientService);
   private readonly titleCasePipe = inject(TitleCasePipe);
-  private readonly titleService = inject(Title);
-  private readonly metadataService = inject(Meta);
+  private readonly metadataService = inject(MetadataService);
 
 
   readonly year = toSignal(this.activeRouter.paramMap.pipe(map((v) => Number.parseInt(v.get('year')!))), { initialValue: Number.parseInt(this.activeRouter.snapshot.paramMap.get('year')!) })
@@ -67,11 +67,12 @@ export class AnualComponent {
   updateMetadata() {
     const title = `Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`
     this.topNavbarService.title.set(title);
-    this.titleService.setTitle(title);
-    this.metadataService.updateTag({ property: 'og:title', content: title });
     const description = `Listado de festivos ${this.titleCasePipe.transform(this.provincia())} año ${this.year()}`;
-    this.metadataService.updateTag({ property: 'og:description', content: description });
-    this.metadataService.updateTag({ name: 'description', content: description })
+    this.metadataService.updateMetadata({
+      title,
+      description,
+      updateCanonical: true
+    });
   }
 
 }

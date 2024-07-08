@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, PLATFORM_ID, inject, model } from '@angul
 import { EventType, Router, RouterOutlet } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { SidemenuComponent } from './components/sidemenu/sidemenu.component';
-import { TopNavbarService } from './services/top-navbar/top-navbar.service';
+import { TopNavbarService } from './services/top-navbar.service';
 import { MenuIconComponent } from './menu-icon/menu-icon.component';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { filter } from 'rxjs';

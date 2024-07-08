@@ -3,11 +3,11 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { Capacitor } from "@capacitor/core";
-import { environmnet } from "../../environments/environment";
 import { FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
 import { FindFestivosProvinciaRequest } from "@/shared/models/input/find-festivos-provincia.request";
 import { FindProvinciasResponse } from "@/shared/models/output/find-provincias.response";
 import { FindYearResponse } from "@/shared/models/output/find-years.response";
+import { environmnet } from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'

@@ -4,8 +4,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { TopNavbarService } from '@/app/services/top-navbar/top-navbar.service';
-import { RestClientService } from '@/app/services/rest-client/rest-client.service';
+import { TopNavbarService } from '@/app/services/top-navbar.service';
+import { RestClientService } from '@/app/services/rest-client.service';
 
 @Component({
   selector: 'app-home',

@@ -1,6 +1,6 @@
 import { DOMParser } from "@xmldom/xmldom";
 import * as xpath from "xpath";
-import { capitalize, decodeHTMLEntities } from "../utils";
+import { capitalize, decodeHTMLEntities, HttpError } from "../utils";
 import { Mes, TipoFestividad } from '@/shared/models/common';
 import { DiaFestivo, FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
 import { FindProvinciasResponse } from "@/shared/models/output/find-provincias.response";
@@ -15,38 +15,55 @@ const domParserArgs = {
 }
 
 export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
+
+    try {
+        const response = await fetch(
+            `https://www.calendarioslaborales.com/calendario-laboral-${provincia}-${year}.htm`,
+        );
     
-    const response = await fetch(
-        `https://www.calendarioslaborales.com/calendario-laboral-${provincia}-${year}.htm`,
-    );
+        const html = await response.text();
+        const doc = new DOMParser(domParserArgs).parseFromString(html);
+    
+        const festivoElements = xpath.select(`//*/div[starts-with(@id, 'wrap') and @class='mes']`, doc) as Array<Element>;
 
-    const html = await response.text();
-    const doc = new DOMParser(domParserArgs).parseFromString(html);
+        if(festivoElements.length === 0) {
+            throw new HttpError(`${provincia} not found`, 404);
+        }
+    
+        const mapFestivos: Map<Mes, Array<DiaFestivo>> = new Map();
+        for (const element of festivoElements) {
+    
+            const mes = element.getAttribute('id')!.slice('wrap'.length).toLowerCase();
+    
+            // const nMes = meses.indexOf(mes as Mes);
+            const listadoFestivosElement: Element | undefined = (xpath.select(`//*/div[@id='wrap${capitalize(mes)}']/div[@class='wrapFestivos']/ul`, element) as Element[])[0]
+    
+            const listaFestivos = Array.from(listadoFestivosElement?.childNodes || []).map((li) => {
+                const span = li.firstChild! as Element;
+                const dia = Number.parseInt(span.firstChild!.nodeValue!.split(' de ')[0]);
+                const nameFestividad = li.lastChild!.nodeValue!;
+                const tipoFestividad = span.getAttribute('class');
+                const festividad: TipoFestividad = tipoFestividad === 'festivoN' ? 'nacional' :
+                    tipoFestividad === 'festivoP' ? 'provincial' : 'regional';
+                return { dia, nameFestividad, festividad };
+            });
+    
+            mapFestivos.set(mes as Mes, listaFestivos);
+        }
+    
+        return Object.fromEntries(mapFestivos.entries());
+    } catch(ex) {
+        
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        const err = ex as any;
+        if(err.statusCode === 404) {
+            throw new HttpError('Not found', 404);
+        }
 
-    const festivoElements = xpath.select(`//*/div[starts-with(@id, 'wrap') and @class='mes']`, doc) as Array<Element>;
+        throw new HttpError(err.message, err.statusCode || 500);
 
-    const mapFestivos: Map<Mes, Array<DiaFestivo>> = new Map();
-    for (const element of festivoElements) {
-
-        const mes = element.getAttribute('id')!.slice('wrap'.length).toLowerCase();
-
-        // const nMes = meses.indexOf(mes as Mes);
-        const listadoFestivosElement: Element | undefined = (xpath.select(`//*/div[@id='wrap${capitalize(mes)}']/div[@class='wrapFestivos']/ul`, element) as Element[])[0]
-
-        const listaFestivos = Array.from(listadoFestivosElement?.childNodes || []).map((li) => {
-            const span = li.firstChild! as Element;
-            const dia = Number.parseInt(span.firstChild!.nodeValue!.split(' de ')[0]);
-            const nameFestividad = li.lastChild!.nodeValue!;
-            const tipoFestividad = span.getAttribute('class');
-            const festividad: TipoFestividad = tipoFestividad === 'festivoN' ? 'nacional' :
-                tipoFestividad === 'festivoP' ? 'provincial' : 'regional';
-            return { dia, nameFestividad, festividad };
-        });
-
-        mapFestivos.set(mes as Mes, listaFestivos);
     }
-
-    return Object.fromEntries(mapFestivos.entries());
+    
 }
 
 export async function getProvincias(): Promise<FindProvinciasResponse> {

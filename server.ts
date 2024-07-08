@@ -4,7 +4,7 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
-import { HOST_URL } from './shared/di/tokens';
+import { HOST_URL, REQUEST, RESPONSE } from './shared/di/tokens';
 import { router } from './server/application/api';
 import { generateSiteMap } from './server/infrastructure/generator-sitemap';
 import { MemoryCacheStorage } from './server/infrastructure/cache-manager';
@@ -53,7 +53,9 @@ export async function app(): Promise<express.Express> {
         publicPath: browserDistFolder,
         providers: [
           { provide: APP_BASE_HREF, useValue: baseUrl },
-          { provide: HOST_URL, useValue: url }
+          { provide: HOST_URL, useValue: url },
+          { provide: REQUEST, useValue: req },
+          { provide: RESPONSE, useValue: res}
         ],
       })
       .then((html) => res.send(html))

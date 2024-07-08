@@ -1,4 +1,4 @@
-import { RestClientService } from '@/app/services/rest-client/rest-client.service';
+import { RestClientService } from '@/app/services/rest-client.service';
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';

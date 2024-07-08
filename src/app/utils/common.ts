@@ -3,7 +3,7 @@ import { inject } from "@angular/core";
 
 export function updateCanonnicalUrl(url?: string) {
     const document = inject(DOCUMENT);
-    const canURL = url == undefined ? document.URL : url;
+    const canURL = !url ? document.URL : url;
     const link: HTMLLinkElement = document.createElement('link');
     link.setAttribute('rel', 'canonical');
     document.head.appendChild(link);
