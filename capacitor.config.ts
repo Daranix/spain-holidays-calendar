@@ -3,7 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const basicConfig: CapacitorConfig = {
   appId: 'dev.mpesteban.calendario.festivos',
   appName: 'Calendario Festivos España',
-  webDir: 'dist/browser',
+  webDir: 'dist/browser'
 }
 
 function getConfig(): CapacitorConfig {

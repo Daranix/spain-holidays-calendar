@@ -73,7 +73,6 @@ async function run() {
     console.warn('.env file not found');
   }
   
-  // biome-ignore lint/complexity/useLiteralKeys: Environment variables has to be accessed this way
   const port = process.env['PORT'] || 3000;
 
 
