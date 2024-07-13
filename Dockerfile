@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy built files from the builder stage
 COPY ./package*.json /app
 COPY ./dist /app/dist
-RUN bun install --configuration=production
+RUN bun install --production
 
 # Expose port 80
 EXPOSE 3000
