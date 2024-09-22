@@ -69,10 +69,10 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: Setup flyctl
-      uses: superfly/flyctl-actions/setup-flyctl@master
+    #- name: Setup flyctl
+    #  uses: superfly/flyctl-actions/setup-flyctl@master
 
-    - name: Deploy to Fly.io
-      run: |
-        flyctl deploy -i ${{ steps.image_fullname.outputs.lowercase_name }}:${{ github.event.release.tag_name }} --app spain-holidays-calendar
+    #- name: Deploy to Fly.io
+    #  run: |
+    #    flyctl deploy -i ${{ steps.image_fullname.outputs.lowercase_name }}:${{ github.event.release.tag_name }} --app spain-holidays-calendar
     
