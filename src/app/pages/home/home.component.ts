@@ -9,18 +9,15 @@ import { RestClientService } from '@/app/services/rest-client.service';
 import { GoogleAdComponent } from '@/app/components/google-ad/google-ad.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    MapComponent,
-    FormsModule,
-    GoogleAdComponent
-  ],
-  providers: [
-  ],
-
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+    selector: 'app-home',
+    imports: [
+        MapComponent,
+        FormsModule,
+        GoogleAdComponent
+    ],
+    providers: [],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent {
 

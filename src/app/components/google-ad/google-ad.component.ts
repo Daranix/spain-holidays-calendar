@@ -2,11 +2,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, PLATFORM_ID, inject } from '@angular/core';
 
 @Component({
-  selector: 'app-google-ad',
-  standalone: true,
-  imports: [],
-  templateUrl: './google-ad.component.html',
-  styleUrl: './google-ad.component.scss'
+    selector: 'app-google-ad',
+    imports: [],
+    templateUrl: './google-ad.component.html',
+    styleUrl: './google-ad.component.scss'
 })
 export class GoogleAdComponent implements AfterViewInit {
 

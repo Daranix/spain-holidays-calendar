@@ -9,19 +9,18 @@ import { filter } from 'rxjs';
 import { App } from '@capacitor/app';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    SidemenuComponent,
-    RouterOutlet,
-    MenuIconComponent,
-    CommonModule
-  ],
-  providers: [
-    TopNavbarService
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [
+        SidemenuComponent,
+        RouterOutlet,
+        MenuIconComponent,
+        CommonModule
+    ],
+    providers: [
+        TopNavbarService
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
 

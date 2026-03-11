@@ -5,13 +5,12 @@ import { meses } from '@/shared/models/common';
 import { DiaFestivo } from '@/shared/models/output/find-festivos-provincia.response';
 
 @Component({
-  selector: 'app-calendar',
-  standalone: true,
-  imports: [
-    CommonModule
-  ],
-  templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.scss'
+    selector: 'app-calendar',
+    imports: [
+        CommonModule
+    ],
+    templateUrl: './calendar.component.html',
+    styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent {
 

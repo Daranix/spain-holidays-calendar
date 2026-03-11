@@ -5,13 +5,12 @@ import { RouterModule } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 
 @Component({
-  selector: 'app-sidemenu',
-  standalone: true,
-  imports: [
-    RouterModule
-  ],
-  templateUrl: './sidemenu.component.html',
-  styleUrl: './sidemenu.component.scss'
+    selector: 'app-sidemenu',
+    imports: [
+        RouterModule
+    ],
+    templateUrl: './sidemenu.component.html',
+    styleUrl: './sidemenu.component.scss'
 })
 export class SidemenuComponent {
 

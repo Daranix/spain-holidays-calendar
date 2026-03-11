@@ -15,18 +15,17 @@ import { updateCanonnicalUrl } from '@/app/utils/common';
 import { MetadataService } from '@/app/services/metadata.service';
 
 @Component({
-  selector: 'app-anual',
-  standalone: true,
-  imports: [
-    CalendarComponent,
-    CommonModule,
-    SpinnerComponent
-  ],
-  providers: [
-    TitleCasePipe
-  ],
-  templateUrl: './anual.component.html',
-  styleUrl: './anual.component.scss'
+    selector: 'app-anual',
+    imports: [
+        CalendarComponent,
+        CommonModule,
+        SpinnerComponent
+    ],
+    providers: [
+        TitleCasePipe
+    ],
+    templateUrl: './anual.component.html',
+    styleUrl: './anual.component.scss'
 })
 export class AnualComponent {
 
