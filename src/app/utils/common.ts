@@ -1,5 +1,5 @@
-import { DOCUMENT, isPlatformBrowser } from "@angular/common";
-import { PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { PLATFORM_ID, inject, DOCUMENT } from "@angular/core";
 
 export function updateCanonnicalUrl(url?: string) {
     const document = inject(DOCUMENT);

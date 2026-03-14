@@ -18,6 +18,6 @@ export const meses = [
 export type Mes = (typeof meses)[number];
 
 
-export const TipoFestividadSchema = picklist(['regional', 'provincial', 'nacional']);
+export const TipoFestividadSchema = picklist(['regional', 'provincial', 'nacional', 'local']);
 
 export type TipoFestividad = Input<typeof TipoFestividadSchema>;
