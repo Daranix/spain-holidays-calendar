@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node dist/server/server.mjs",
-    "build": "ng build --configuration production && capacitor sync",
+    "build": "ng build --configuration production && node -e \"require('fs').copyFileSync('dist/browser/index.csr.html', 'dist/browser/index.html')\" && capacitor sync",
     "build:dev": "ng build --configuration development",
     "watch": "npm run build:dev -- --configuration development --watch",
     "dev": "ng serve --host 0.0.0.0",
