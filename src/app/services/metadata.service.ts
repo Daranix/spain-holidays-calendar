@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { inject, Injectable } from '@angular/core';
+
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 
@@ -16,25 +16,29 @@ interface MetaInfo {
 })
 export class MetadataService {
 
-  private readonly titleService = inject(Title);
-  private readonly metadataService = inject(Meta);
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
 
 
   updateMetadata({ title, description, updateCanonical = true, keywords, thumbnail }: MetaInfo) {
 
-    this.titleService.setTitle(title);
-    this.metadataService.updateTag({ property: 'og:title', content: title });
+    this.title.setTitle(title);
+    this.meta.updateTag({ property: 'og:title', content: title });
 
-    this.metadataService.updateTag({ property: 'og:description', content: description });
-    this.metadataService.updateTag({ name: 'description', content: description });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ name: 'description', content: description });
 
-    if(thumbnail) {
-      this.metadataService.updateTag({ property: 'og:image', content: thumbnail })
-      this.metadataService.updateTag({ name: 'twitter:image', content: thumbnail })
+    if (keywords) {
+      this.meta.updateTag({ name: 'keywords', content: keywords });
     }
 
-    if(updateCanonical) {
+    if (thumbnail) {
+      this.meta.updateTag({ property: 'og:image', content: thumbnail })
+      this.meta.updateTag({ name: 'twitter:image', content: thumbnail })
+    }
+
+    if (updateCanonical) {
       this.updateCanonnicalUrl();
     }
   }
@@ -42,7 +46,12 @@ export class MetadataService {
 
   private updateCanonnicalUrl(url?: string) {
     const canURL = !url ? this.document.URL : url;
-    const link = this.document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    let link = this.document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!link) {
+      link = this.document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      this.document.head.appendChild(link);
+    }
     link.setAttribute('href', canURL);
   }
 

@@ -1,4 +1,3 @@
-import minify from "minify-xml";
 import { getProvincias, getYears } from "./operations";
 
 export async function generateSiteMap(): Promise<string> {
@@ -24,7 +23,7 @@ export async function generateSiteMap(): Promise<string> {
 
     const lastMod = new Date().toISOString();
     
-    return minify(`<?xml version="1.0" encoding="UTF-8"?>
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       ${paths.map((path) => {
                  return `
@@ -36,5 +35,7 @@ export async function generateSiteMap(): Promise<string> {
              })
              .join('')}
     </urlset>
-  `);
+  `;
+
+  return xml.replace(/>\s+</g, '><').trim();
 }

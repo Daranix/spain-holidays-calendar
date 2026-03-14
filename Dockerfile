@@ -1,15 +1,26 @@
 # Runtime stage
-FROM node:20-alpine AS app
+FROM node:22-alpine AS app
 
 WORKDIR /app
 
-# Copy built files from the builder stage
-COPY ./package*.json /app
-COPY ./dist /app/dist
-RUN npm install --configuration=production
+# Change ownership of /app to node user
+RUN chown -R node:node /app
 
-# Expose port 80
+# Environment to avoid npm update checks and other noise
+ENV NODE_ENV=production
+
+# Copy built files with correct ownership
+COPY --chown=node:node ./package*.json /app/
+COPY --chown=node:node ./dist /app/dist/
+
+# Switch to non-root user
+USER node
+
+# Install production dependencies
+RUN npm install --omit=dev
+
+# Expose port
 EXPOSE 3000
 
-# Command to run nginx in the foreground
+# Command to run the application
 CMD ["npm", "start"]

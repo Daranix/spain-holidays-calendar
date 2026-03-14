@@ -1,109 +1,121 @@
-import { DOMParser } from "@xmldom/xmldom";
-import * as xpath from "xpath";
+import { parseHTML } from 'linkedom';
 import { capitalize, decodeHTMLEntities, HttpError } from "../utils";
-import { Mes, TipoFestividad } from '@/shared/models/common';
+import { Mes, meses, TipoFestividad } from '@/shared/models/common';
 import { DiaFestivo, FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
 import { FindProvinciasResponse } from "@/shared/models/output/find-provincias.response";
 
-const domParserArgs = {
-    locator: {},
-    errorHandler: {
-        warning: (w: Error) => { },
-        error: (e: Error) => { },
-        fatalError: (e: Error) => { console.error(e) }
-    }
-}
-
 export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
-
     try {
         const response = await fetch(
             `https://www.calendarioslaborales.com/calendario-laboral-${provincia}-${year}.htm`,
         );
-    
-        const html = await response.text();
-        const doc = new DOMParser(domParserArgs).parseFromString(html);
-    
-        const festivoElements = xpath.select(`//*/div[starts-with(@id, 'wrap') and @class='mes']`, doc) as Array<Element>;
 
-        if(festivoElements.length === 0) {
+        if (!response.ok) {
+            throw new HttpError(`${provincia} not found for year ${year}`, 404);
+        }
+
+        const html = await response.text();
+        const { document } = parseHTML(html);
+
+        const monthElements = Array.from(document.querySelectorAll('.month'));
+
+        if (monthElements.length === 0) {
             throw new HttpError(`${provincia} not found`, 404);
         }
-    
+
         const mapFestivos: Map<Mes, Array<DiaFestivo>> = new Map();
-        for (const element of festivoElements) {
-    
-            const mes = element.getAttribute('id')!.slice('wrap'.length).toLowerCase();
-    
-            // const nMes = meses.indexOf(mes as Mes);
-            const listadoFestivosElement: Element | undefined = (xpath.select(`//*/div[@id='wrap${capitalize(mes)}']/div[@class='wrapFestivos']/ul`, element) as Element[])[0]
-    
-            const listaFestivos = Array.from(listadoFestivosElement?.childNodes || []).map((li) => {
-                const span = li.firstChild! as Element;
-                const dia = Number.parseInt(span.firstChild!.nodeValue!.split(' de ')[0]);
-                const nameFestividad = li.lastChild!.nodeValue!;
-                const tipoFestividad = span.getAttribute('class');
-                const festividad: TipoFestividad = tipoFestividad === 'festivoN' ? 'nacional' :
-                    tipoFestividad === 'festivoP' ? 'provincial' : 'regional';
+        for (const element of monthElements) {
+            const monthNameText = element.querySelector('.month-name')?.textContent?.trim().toLowerCase() as Mes;
+
+            if (!monthNameText || !meses.includes(monthNameText)) {
+                continue;
+            }
+
+            const holidayItems = Array.from(element.querySelectorAll('.month-holidays li'));
+
+            const listaFestivos = holidayItems.map((li) => {
+                const span = (li as Element).querySelector('span');
+                if (!span) return null;
+
+                const dateText = span.textContent?.trim() || ''; // e.g. "01 de enero"
+                const diaString = dateText.split(' de ')[0];
+                const dia = Number.parseInt(diaString);
+
+                if (Number.isNaN(dia)) return null;
+
+                const fullText = (li as Element).textContent?.trim() || '';
+                // The name is after the date and the separator (– or -)
+                const nameFestividad = fullText.replace(dateText, '').replace(/^[–\s-]+/, '').trim();
+
+                const classAttr = span.getAttribute('class') || '';
+                const festividad: TipoFestividad =
+                    classAttr.includes('national') ? 'nacional' :
+                        classAttr.includes('regional') ? 'regional' :
+                            classAttr.includes('provincial') ? 'provincial' :
+                                classAttr.includes('local') ? 'local' : 'local';
+
                 return { dia, nameFestividad, festividad };
-            });
-    
-            mapFestivos.set(mes as Mes, listaFestivos);
+            }).filter(f => f !== null) as Array<DiaFestivo>;
+
+            mapFestivos.set(monthNameText, listaFestivos);
         }
-    
+
         return Object.fromEntries(mapFestivos.entries());
-    } catch(ex) {
-        
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    } catch (ex) {
+        if (ex instanceof HttpError) throw ex;
         const err = ex as any;
-        if(err.statusCode === 404) {
-            throw new HttpError('Not found', 404);
-        }
-
         throw new HttpError(err.message, err.statusCode || 500);
-
     }
-    
 }
 
 export async function getProvincias(): Promise<FindProvinciasResponse> {
-    const response = await fetch("https://www.calendarioslaborales.com/", {
+    const currentYear = new Date().getFullYear();
+    const response = await fetch(`https://www.calendarioslaborales.com/calendarios-laborales-${currentYear}-por-provincias.htm`, {
         method: "GET",
     });
 
-    const html = await response.text();
-    const doc = new DOMParser(domParserArgs).parseFromString(html);
+    if (!response.ok) {
+        // Fallback to a plain URL if the year-specific one fails
+        const fallbackResponse = await fetch("https://www.calendarioslaborales.com/calendarios-laborales-2026-por-provincias.htm");
+        if (!fallbackResponse.ok) return [];
+        return parseProvincias(await fallbackResponse.text());
+    }
 
-    const elements = xpath.select(
-        "/html/body/div/div/div[1]/div/div[1]/div/form/div[1]/select/option[position() > 1]",
-        doc,
-    ) as Array<Element>;
+    return parseProvincias(await response.text());
+}
 
-    const provincias = elements.map((e) => {
+function parseProvincias(html: string): FindProvinciasResponse {
+    const { document } = parseHTML(html);
+    const elements = document.querySelectorAll('.calendar-geo-card');
+
+    return Array.from(elements).map((e) => {
+        const href = e.getAttribute('href') || '';
+        // href is like "/calendario-laboral-madrid-2026.htm"
+        const id = href.replace(/^\//, '').replace('calendario-laboral-', '').replace(/-20\d{2}\.htm$/, '');
         return {
-            id: e.getAttribute("value")!,
-            label: e.firstChild!.nodeValue!,
+            id: id,
+            label: e.querySelector('.calendar-geo-title')?.textContent?.trim() || id,
         };
-    });
-
-    return provincias;
+    }).filter(p => p.id && p.label);
 }
 
 export async function getYears() {
-    const response = await fetch("https://www.calendarioslaborales.com/");
-    const html = await response.text();
-    const doc = new DOMParser(domParserArgs).parseFromString(html);
-
-    const groupsElements = xpath.select(`/html/body/div/div/div[1]/div/div[1]/div/form/div[2]/select/optgroup`, doc) as Element[];
+    const startYear = 2005;
+    const currentYear = new Date().getFullYear();
+    const endYear = currentYear + 6;
 
     const yearsData = [];
-    for (const group of groupsElements) {
-        const groupName = group.getAttribute('label')!;
-        const yearsGroup = Array.from(group.childNodes).filter((node) => node.nodeName === 'option').map((li) => {
-            const year = Number.parseInt((li as Element).getAttribute('value')!);
-            return { year, groupName: decodeHTMLEntities(groupName) }
-        });
-        yearsData.push(...yearsGroup);
+    for (let year = endYear; year >= startYear; year--) {
+        let groupName = "Anteriores";
+        if (year === currentYear) {
+            groupName = "Año actual";
+        } else if (year > currentYear) {
+            groupName = "Próximos años";
+        } else if (year >= currentYear - 2) {
+            groupName = "Recientes";
+        }
+
+        yearsData.push({ year, groupName });
     }
 
     return yearsData;

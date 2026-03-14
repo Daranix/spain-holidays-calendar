@@ -1,3 +1,3 @@
-export const environmnet = {
+export const environment = {
     capacitorApiBaseUrl: 'http://10.0.2.2:3000/api'
 }
