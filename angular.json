@@ -44,14 +44,6 @@
             "outputMode": "server",
             "ssr": {
               "entry": "server.ts"
-            },
-            "security": {
-              "allowedHosts": [
-                "localhost",
-                "127.0.0.1",
-                "0.0.0.0",
-                "192.168.1.142"
-              ]
             }
           },
           "configurations": {

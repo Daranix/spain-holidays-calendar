@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import '@angular/compiler';
 
 import {
@@ -10,10 +11,10 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { router as apiRouter } from './server/application/api';
+import { stringToMilliseconds } from './server/utils';
+import { MemoryCacheStorage } from './server/infrastructure/cache-manager';
+import { generateSiteMap } from './server/infrastructure/generator-sitemap';
 
-// Configuración de seguridad para Angular 21 SSR
-// Definimos los hosts permitidos a través de la variable de entorno que reconoce @angular/ssr
-process.env['NG_ALLOWED_HOSTS'] = 'localhost,127.0.0.1,0.0.0.0,192.168.1.142';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -21,9 +22,7 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 
 // Pasamos explícitamente los hosts permitidos también al motor
-const angularApp = new AngularNodeAppEngine({
-  allowedHosts: ['localhost', '127.0.0.1', '0.0.0.0', '192.168.1.142']
-} as any);
+const angularApp = new AngularNodeAppEngine();
 
 /**
  * Serve static files from /browser
@@ -35,6 +34,19 @@ app.use(
     redirect: false,
   }),
 );
+
+
+/**
+ * Sitemap
+ */
+
+app.get('/sitemap.xml', async (req, res) => {
+  const sitemapCacheTime = stringToMilliseconds('10d'); // 10d
+  const sitemap = await MemoryCacheStorage.register('sitemap', () => generateSiteMap(), sitemapCacheTime);
+  res.setHeader('Content-Type', 'text/xml');
+  res.write(sitemap);
+  res.end();
+})
 
 /**
  * API Routes
