@@ -1,6 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+
+# Global rules for all crawlers
 User-agent: *
 Allow: /
-Sitemap: https://calendariovacaciones.com/sitemap.xml
 Disallow: /api/
-Disallow: /error
 Allow: /api/files/*
+Disallow: /error
+Disallow: /*?* # Block URLs with query parameters to avoid duplicate content
+
+# Sitemap
+Sitemap: https://calendariovacaciones.com/sitemap.xml
