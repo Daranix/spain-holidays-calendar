@@ -20,6 +20,10 @@
         &.fprovincial {
             @apply bg-purple-600 text-white;
         }
+
+        &.flocal {
+            @apply bg-rose-600 text-white;
+        }
     }
     
     &:first-child {
@@ -46,6 +50,10 @@
 
     .fprovincial {
         @apply text-purple-600;
+    }
+
+    .flocal {
+        @apply text-rose-600;
     }
 
     .festivo {
