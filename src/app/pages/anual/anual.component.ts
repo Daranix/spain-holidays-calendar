@@ -3,7 +3,7 @@ import { RestClientService } from '@/app/services/rest-client.service';
 import { TopNavbarService } from '@/app/services/top-navbar.service';
 import { meses } from '@/shared/models/common';
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
@@ -53,6 +53,29 @@ export class AnualComponent {
   );
 
   readonly meses = meses;
+
+  readonly holidaySummary = computed(() => {
+    const data = this.festivos().data;
+    if (!data) return null;
+
+    let total = 0;
+    const byType: Record<string, number> = { nacional: 0, regional: 0, provincial: 0, local: 0 };
+    
+    for (const month of Object.values(data)) {
+      total += month.length;
+      for (const h of month) {
+        byType[h.festividad] = (byType[h.festividad] || 0) + 1;
+      }
+    }
+
+    return {
+      total,
+      nacional: byType['nacional'],
+      regional: byType['regional'],
+      provincial: byType['provincial'],
+      local: byType['local']
+    };
+  });
 
   constructor() {
     updateCanonnicalUrl();

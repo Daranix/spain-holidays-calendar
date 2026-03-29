@@ -5,7 +5,10 @@ export async function generateSiteMap(): Promise<string> {
     const basePath = process.env['BASE_URL'];
 
     const paths = [
-        '/'
+        '/',
+        '/acerca-de',
+        '/politica-privacidad',
+        '/contacto'
     ];
 
 
@@ -14,9 +17,16 @@ export async function generateSiteMap(): Promise<string> {
         getProvincias()
     ]);
 
-    for (const year of years) {
+    const currentYear = new Date().getFullYear();
+    const sortedYears = [...years].sort((a, b) => {
+        if (a.year === currentYear) return -1;
+        if (b.year === currentYear) return 1;
+        return b.year - a.year; // Descending for the rest
+    });
+
+    for (const yearData of sortedYears) {
         for (const provincia of provincias) {
-            paths.push(`/festivos/${provincia.id}/${year.year}`);
+            paths.push(`/festivos/${provincia.id}/${yearData.year}`);
         }
     }
 

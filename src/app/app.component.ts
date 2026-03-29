@@ -3,6 +3,7 @@ import { EventType, Router, RouterOutlet } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { SidemenuComponent } from './components/sidemenu/sidemenu.component';
 import { CookieBannerComponent } from './components/cookie-banner/cookie-banner.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { TopNavbarService } from './services/top-navbar.service';
 import { MenuIconComponent } from './menu-icon/menu-icon.component';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -16,7 +17,8 @@ import { App } from '@capacitor/app';
     RouterOutlet,
     MenuIconComponent,
     CommonModule,
-    CookieBannerComponent
+    CookieBannerComponent,
+    FooterComponent
   ],
   providers: [
     TopNavbarService
