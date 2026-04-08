@@ -18,6 +18,18 @@ export const meses = [
 export type Mes = (typeof meses)[number];
 
 
-export const TipoFestividadSchema = picklist(['regional', 'provincial', 'nacional', 'local']);
+export const TipoFestividadSchema = picklist(['autonomico', 'nacional', 'local']);
 
 export type TipoFestividad = Input<typeof TipoFestividadSchema>;
+
+export const HOLIDAY_MAP = {
+    'national': { val: 'nacional', label: 'Festivo Nacional' },
+    'regional': { val: 'autonomico', label: 'Festivo Autonómico' },
+    'local': { val: 'local', label: 'Festivo Local' }
+} as const;
+
+export const HOLIDAY_TYPES_CONFIG = {
+    nacional: HOLIDAY_MAP['national'],
+    autonomico: HOLIDAY_MAP['regional'],
+    local: HOLIDAY_MAP['local']
+} as const;

@@ -23,25 +23,54 @@
             <p class="text-indigo-800 leading-relaxed mb-6">
                 En el año {{ year() }}, la provincia de <strong>{{ provincia() | titlecase }}</strong> cuenta con un total de 
                 <strong>{{ holidaySummary()?.total }} días festivos</strong> laborales. Estos días se distribuyen entre festividades 
-                comunes a toda España, días propios de la comunidad autónoma y festivos locales.
+                nacionales comunes a toda España, días propios de la comunidad autónoma y festivos locales de cada municipio.
             </p>
             
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="grid grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-indigo-100">
-                    <span class="block text-2xl font-bold text-red-600">{{ holidaySummary()?.nacional }}</span>
-                    <span class="text-xs font-medium text-gray-500 uppercase">Nacionales</span>
+                    <span class="block text-2xl font-bold text-green-700">{{ holidaySummary()?.nacional }}</span>
+                    <span class="text-xs font-medium text-gray-500">Festivo Nacional</span>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-indigo-100">
-                    <span class="block text-2xl font-bold text-blue-600">{{ holidaySummary()?.regional }}</span>
-                    <span class="text-xs font-medium text-gray-500 uppercase">Regionales</span>
+                    <span class="block text-2xl font-bold text-blue-600">{{ holidaySummary()?.autonomico }}</span>
+                    <span class="text-xs font-medium text-gray-500">Festivo Autonómico</span>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-indigo-100">
-                    <span class="block text-2xl font-bold text-green-600">{{ holidaySummary()?.provincial }}</span>
-                    <span class="text-xs font-medium text-gray-500 uppercase">Provinciales</span>
+                    <span class="block text-2xl font-bold text-rose-600">{{ holidaySummary()?.local }}</span>
+                    <span class="text-xs font-medium text-gray-500">Festivo Local</span>
                 </div>
-                <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-indigo-100">
-                    <span class="block text-2xl font-bold text-yellow-500">{{ holidaySummary()?.local }}</span>
-                    <span class="text-xs font-medium text-gray-500 uppercase">Locales</span>
+            </div>
+
+            <!-- Sección explicativa de categorías -->
+            <div class="mt-6 bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Distribución de festivos en España
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-green-700 mt-1.5 shrink-0"></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">Festivo Nacional</p>
+                            <p class="text-xs text-gray-600 leading-relaxed">Días festivos comunes en todo el territorio nacional, regulados por el Estado y publicados en el BOE.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0"></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">Festivo Autonómico</p>
+                            <p class="text-xs text-gray-600 leading-relaxed">Festividades designadas por cada Comunidad Autónoma según sus tradiciones y festejos propios.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-rose-600 mt-1.5 shrink-0"></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">Festivo Local</p>
+                            <p class="text-xs text-gray-600 leading-relaxed">Dos días determinados anualmente por cada ayuntamiento, coincidiendo habitualmente con sus fiestas patronales.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -51,14 +80,16 @@
         </section>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none pl-6 pr-6 pt-4 pb-16 gap-y-16 gap-x-6">
-
-                @for(month of meses; track idx; let idx = $index) {
-                    <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivos().data![meses[idx]]!"></app-calendar>
-                }
-            
-
+            @for(month of meses; track idx; let idx = $index) {
+                <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivos().data![meses[idx]]!"></app-calendar>
+            }
         </div>
+
+        <app-holiday-info-section 
+            [festivos]="festivos().data!" 
+            [province]="provincia() | titlecase" 
+            [year]="year()">
+        </app-holiday-info-section>
+
     }
-
-
 </div>

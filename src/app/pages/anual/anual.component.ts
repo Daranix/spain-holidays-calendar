@@ -1,4 +1,5 @@
 import { CalendarComponent } from '@/app/calendar/calendar.component';
+import { HolidayInfoSectionComponent } from '@/app/calendar/holiday-info-section/holiday-info-section.component';
 import { RestClientService } from '@/app/services/rest-client.service';
 import { TopNavbarService } from '@/app/services/top-navbar.service';
 import { meses } from '@/shared/models/common';
@@ -19,7 +20,8 @@ import { MetadataService } from '@/app/services/metadata.service';
     imports: [
         CalendarComponent,
         CommonModule,
-        SpinnerComponent
+        SpinnerComponent,
+        HolidayInfoSectionComponent
     ],
     providers: [
         TitleCasePipe
@@ -59,20 +61,22 @@ export class AnualComponent {
     if (!data) return null;
 
     let total = 0;
-    const byType: Record<string, number> = { nacional: 0, regional: 0, provincial: 0, local: 0 };
+    const byType: Record<string, number> = { nacional: 0, autonomico: 0, local: 0 };
     
     for (const month of Object.values(data)) {
       total += month.length;
       for (const h of month) {
-        byType[h.festividad] = (byType[h.festividad] || 0) + 1;
+        const tipo = h.festividad;
+        if (byType[tipo] !== undefined) {
+          byType[tipo]++;
+        }
       }
     }
 
     return {
       total,
       nacional: byType['nacional'],
-      regional: byType['regional'],
-      provincial: byType['provincial'],
+      autonomico: byType['autonomico'],
       local: byType['local']
     };
   });
@@ -83,13 +87,18 @@ export class AnualComponent {
     this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
       this.updateMetadata();
     });
-
   }
 
   updateMetadata() {
-    const title = `Calendario Festivos ${this.titleCasePipe.transform(this.provincia())} - ${this.year()}`
+    const provincia = this.titleCasePipe.transform(this.provincia());
+    const year = this.year();
+    const title = `Calendario Festivos ${provincia} - ${year}`
     this.topNavbarService.title.set(title);
-    const description = `Listado de festivos ${this.titleCasePipe.transform(this.provincia())} año ${this.year()}`;
+    
+    const summary = this.holidaySummary();
+    const totalMsg = summary ? `total de ${summary.total} días festivos` : 'listado de festivos';
+    const description = `Calendario laboral completo de ${provincia} para el año ${year}. Consulta el ${totalMsg}, incluyendo Festivo Nacional, Festivo Autonómico y Festivo Local para planificar tus vacaciones y puentes.`;
+    
     this.metadataService.updateMetadata({
       title,
       description,
