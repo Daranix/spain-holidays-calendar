@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TopNavbarService } from '@/app/services/top-navbar.service';
 import { MetadataService } from '@/app/services/metadata.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-politica-privacidad',
-    imports: [],
+    imports: [RouterLink],
     templateUrl: './politica-privacidad.component.html',
     styleUrl: './politica-privacidad.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

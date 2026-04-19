@@ -360,6 +360,36 @@ export class HolidayDescriptionsService {
       origin: 'Genera uno de los puentes más largos y esperados del año (Puente de la Inmaculada).',
       traditions: 'Viajes, turismo nacional, encendido de luces de Navidad y compras navideñas.',
     },
+    'san fermín': {
+      name: 'San Fermín',
+      description: 'El 7 de julio se celebra San Fermín, la fiesta más conocida internacionalmente de Pamplona y de toda Navarra.',
+      origin: 'San Fermín fue un misionero cristiano, primer obispo de Amiens y patrón de las diócesis de Pamplona y Tudela.',
+      traditions: 'El Chupinazo marca el inicio de las fiestas el 6 de julio. Los Encierros (carreras delante de los toros por las calles) son el evento más famoso, atrayendo a miles de personas de todo el mundo.',
+    },
+    'sant jordi': {
+      name: 'Sant Jordi (San Jorge)',
+      description: 'El 23 de abril se celebra Sant Jordi, patrón de Cataluña. Es una de las jornadas culturales más bellas y populares de la región.',
+      origin: 'La leyenda cuenta que el caballero Jorge salvó a una princesa de un dragón, naciendo un rosal de la sangre de la bestia.',
+      traditions: 'Es tradición regalar un libro y una rosa a los seres queridos. Las calles se llenan de paradas de libros y flores, convirtiéndose en una gran fiesta de la cultura y el amor.',
+    },
+    'día de la almudena': {
+      name: 'Día de la Almudena',
+      description: 'El 9 de noviembre Madrid celebra la festividad de su patrona, la Virgen de la Almudena.',
+      origin: 'La virgen fue encontrada en un nicho de la muralla (al-mudayna significa ciudadela en árabe) tras la reconquista de Madrid.',
+      traditions: 'Ofrenda floral y procesión de la Virgen. Es costumbre degustar la "Corona de la Almudena", un dulce tipo roscón pero sin fruta escarchada.',
+    },
+    'santo tomás': {
+      name: 'Santo Tomás',
+      description: 'El 21 de diciembre se celebra Santo Tomás en San Sebastián y Bilbao, marcando el inicio de la Navidad.',
+      origin: 'Tiene un origen rural, cuando los baserritarras (labradores) bajaban a la ciudad a pagar sus rentas y vender sus productos.',
+      traditions: 'Mercadillos tradicionales donde el producto estrella es la "txistorra" envuelta en "talo" (torta de maíz), acompañada de sidra.',
+    },
+    'san sebastián': {
+      name: 'San Sebastián',
+      description: 'El 20 de enero se celebra la festividad de San Sebastián, con especial relevancia en la ciudad de San Sebastián con su famosa Tamborrada.',
+      origin: 'Homenaje al santo mártir que da nombre a la ciudad. La Tamborrada tiene un origen vinculado a la ocupación napoleónica.',
+      traditions: 'La Tamborrada recorre las calles de San Sebastián durante 24 horas ininterrumpidas al ritmo de las marchas de Sarriegui.',
+    },
   };
 
   /**

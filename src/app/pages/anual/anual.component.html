@@ -3,22 +3,37 @@
 <div class="flex flex-col justify-center">
 
     @if(!isNative) {
-        <h1 class="font-bold text-center mt-6 mb-2 text-4xl">Calendario Festivos {{ provincia() | titlecase }} - {{ year() }}</h1>
+        <app-breadcrumb [province]="provincia()" [year]="year()"></app-breadcrumb>
+        <h1 class="font-bold text-center mt-2 mb-6 text-4xl">Calendario Festivos {{ provincia() | titlecase }} - {{ year() }}</h1>
     }
 
     @if(festivos().loading) {
-        <div class="w-full">
+        <div class="w-full h-64 flex items-center justify-center">
             <app-spinner />
         </div>
     }
 
     @if(!festivos().loading && festivos().error) {
-        <div>Error al mostrar los resultados</div>
+        <div class="p-8 text-center text-red-600 bg-red-50 rounded-xl mx-6">
+            <p class="font-bold">Error al cargar los festivos</p>
+            <p class="text-sm mt-2">Por favor, intenta recargar la página más tarde.</p>
+        </div>
     }
 
     @if(!festivos().loading && !festivos().error && festivos().data) {
 
-        <section class="max-w-4xl mx-auto px-6 py-8 bg-indigo-50 border border-indigo-100 rounded-xl mb-8">
+        <!-- Selector de Año Rápido -->
+        <nav class="flex justify-center gap-2 mb-8 px-6 overflow-x-auto pb-2" aria-label="Cambiar año">
+            @for (y of [2025, 2026, 2027]; track y) {
+                <a [routerLink]="['/festivos', activeRouter.snapshot.paramMap.get('provincia'), y]"
+                   [class]="y === year() ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'"
+                   class="px-5 py-2 rounded-full text-sm font-bold border transition-all whitespace-nowrap shadow-sm">
+                    {{ y }}
+                </a>
+            }
+        </nav>
+
+        <section class="max-w-4xl mx-auto px-6 py-8 bg-indigo-50 border border-indigo-100 rounded-xl mb-8 shadow-sm">
             <h2 class="text-xl font-bold text-indigo-900 mb-4">Resumen de Festivos en {{ provincia() | titlecase }} para {{ year() }}</h2>
             <p class="text-indigo-800 leading-relaxed mb-6">
                 En el año {{ year() }}, la provincia de <strong>{{ provincia() | titlecase }}</strong> cuenta con un total de 
@@ -42,8 +57,8 @@
             </div>
 
             <!-- Sección explicativa de categorías -->
-            <div class="mt-6 bg-gray-50 rounded-xl p-5 border border-gray-200">
-                <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div class="mt-6 bg-white/50 rounded-xl p-5 border border-indigo-100">
+                <h3 class="text-sm font-bold text-indigo-900 mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -51,21 +66,21 @@
                 </h3>
                 <div class="space-y-4">
                     <div class="flex gap-3">
-                        <div class="w-2 h-2 rounded-full bg-green-700 mt-1.5 shrink-0"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-green-700 mt-1 shrink-0"></div>
                         <div>
                             <p class="text-xs font-bold text-gray-800">Festivo Nacional</p>
                             <p class="text-xs text-gray-600 leading-relaxed">Días festivos comunes en todo el territorio nacional, regulados por el Estado y publicados en el BOE.</p>
                         </div>
                     </div>
                     <div class="flex gap-3">
-                        <div class="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-blue-600 mt-1 shrink-0"></div>
                         <div>
                             <p class="text-xs font-bold text-gray-800">Festivo Autonómico</p>
                             <p class="text-xs text-gray-600 leading-relaxed">Festividades designadas por cada Comunidad Autónoma según sus tradiciones y festejos propios.</p>
                         </div>
                     </div>
                     <div class="flex gap-3">
-                        <div class="w-2 h-2 rounded-full bg-rose-600 mt-1.5 shrink-0"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-rose-600 mt-1 shrink-0"></div>
                         <div>
                             <p class="text-xs font-bold text-gray-800">Festivo Local</p>
                             <p class="text-xs text-gray-600 leading-relaxed">Dos días determinados anualmente por cada ayuntamiento, coincidiendo habitualmente con sus fiestas patronales.</p>
@@ -74,12 +89,12 @@
                 </div>
             </div>
 
-            <p class="text-sm text-indigo-700/80 mt-6 italic">
-                * Nota: Los festivos locales pueden variar según el municipio específico dentro de la provincia de {{ provincia() | titlecase }}.
+            <p class="text-xs text-indigo-700/70 mt-6 italic bg-white/30 p-3 rounded-lg border border-indigo-50">
+                * Nota Informativa: Calendario Vacaciones recopila los datos publicados en boletines oficiales. Los festivos locales pueden variar según el municipio específico dentro de la provincia de {{ provincia() | titlecase }}.
             </p>
         </section>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none pl-6 pr-6 pt-4 pb-16 gap-y-16 gap-x-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none px-6 pt-4 pb-16 gap-y-16 gap-x-6">
             @for(month of meses; track idx; let idx = $index) {
                 <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivos().data![meses[idx]]!"></app-calendar>
             }
@@ -90,6 +105,19 @@
             [province]="provincia() | titlecase" 
             [year]="year()">
         </app-holiday-info-section>
+
+        <!-- Provincias Relacionadas (Internal Linking) -->
+        <section class="max-w-6xl mx-auto px-6 py-12 border-t border-gray-100">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Consultar festivos en otras provincias</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                @for (p of (provinciasResource() || []); track p.id) {
+                    <a [routerLink]="['/festivos', p.id, year()]"
+                       class="px-4 py-2 text-center bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 hover:bg-white hover:border-indigo-300 hover:text-indigo-600 hover:shadow-sm transition-all overflow-hidden text-ellipsis whitespace-nowrap">
+                        {{ p.label }}
+                    </a>
+                }
+            </div>
+        </section>
 
     }
 </div>

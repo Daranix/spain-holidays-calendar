@@ -26,6 +26,14 @@ export const routes: Routes = [
         component: PoliticaPrivacidadComponent
     },
     {
+        path: 'politica-cookies',
+        loadComponent: () => import('./pages/politica-cookies/politica-cookies.component').then(m => m.PoliticaCookiesComponent)
+    },
+    {
+        path: 'terminos-condiciones',
+        loadComponent: () => import('./pages/terminos-condiciones/terminos-condiciones.component').then(m => m.TerminosCondicionesComponent)
+    },
+    {
         path: 'contacto',
         component: ContactoComponent
     },

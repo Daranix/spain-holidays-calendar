@@ -1,4 +1,5 @@
 import { CalendarComponent } from '@/app/calendar/calendar.component';
+import { BreadcrumbComponent } from '@/app/components/breadcrumb/breadcrumb.component';
 import { HolidayInfoSectionComponent } from '@/app/calendar/holiday-info-section/holiday-info-section.component';
 import { RestClientService } from '@/app/services/rest-client.service';
 import { TopNavbarService } from '@/app/services/top-navbar.service';
@@ -6,10 +7,9 @@ import { meses } from '@/shared/models/common';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { map, shareReplay, switchMap } from 'rxjs';
-import { Meta, Title } from '@angular/platform-browser';
 import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { SpinnerComponent } from '@/app/spinner/spinner.component';
 import { updateCanonnicalUrl } from '@/app/utils/common';
@@ -19,9 +19,11 @@ import { MetadataService } from '@/app/services/metadata.service';
     selector: 'app-anual',
     imports: [
         CalendarComponent,
+        BreadcrumbComponent,
         CommonModule,
         SpinnerComponent,
-        HolidayInfoSectionComponent
+        HolidayInfoSectionComponent,
+        RouterLink
     ],
     providers: [
         TitleCasePipe
@@ -34,11 +36,11 @@ export class AnualComponent {
   readonly isNative = Capacitor.isNativePlatform();
 
 
-  private readonly topNavbarService = inject(TopNavbarService);
-  private readonly activeRouter = inject(ActivatedRoute);
-  private readonly restClient = inject(RestClientService);
-  private readonly titleCasePipe = inject(TitleCasePipe);
-  private readonly metadataService = inject(MetadataService);
+  protected readonly topNavbarService = inject(TopNavbarService);
+  protected readonly activeRouter = inject(ActivatedRoute);
+  protected readonly restClient = inject(RestClientService);
+  protected readonly titleCasePipe = inject(TitleCasePipe);
+  protected readonly metadataService = inject(MetadataService);
 
 
   readonly year = toSignal(this.activeRouter.paramMap.pipe(map((v) => Number.parseInt(v.get('year')!))), { initialValue: Number.parseInt(this.activeRouter.snapshot.paramMap.get('year')!) })
@@ -80,6 +82,8 @@ export class AnualComponent {
       local: byType['local']
     };
   });
+
+  readonly provinciasResource = toSignal(this.restClient.getProvincias());
 
   constructor() {
     updateCanonnicalUrl();
