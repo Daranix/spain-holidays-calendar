@@ -17,8 +17,29 @@ interface BlogAttributes {
   [key: string]: any;
 }
 
-// En el entorno de SSR, calculamos la ruta base de los assets del blog
-const BLOG_ASSETS_PATH = path.resolve(process.cwd(), 'src/assets/blog');
+import { fileURLToPath } from 'node:url';
+
+// En el entorno de SSR, calculamos la ruta base de los assets del blog de forma dinámica
+// para que funcione tanto en desarrollo como tras el build (producción)
+const BLOG_ASSETS_PATH = (() => {
+  // Intentamos obtener la ruta relativa al archivo bundleado (como en server.ts)
+  const serverDistFolder = path.dirname(fileURLToPath(import.meta.url));
+  const browserDistFolder = path.resolve(serverDistFolder, '../browser');
+  const distPath = path.join(browserDistFolder, 'assets/blog');
+
+  if (fs.existsSync(distPath)) {
+    return distPath;
+  }
+
+  // Fallback para desarrollo (ng serve o ejecución desde raíz)
+  const devPath = path.resolve(process.cwd(), 'src/assets/blog');
+  if (fs.existsSync(devPath)) {
+    return devPath;
+  }
+
+  // Fallback para otros casos (dist relativo a cwd)
+  return path.resolve(process.cwd(), 'dist/browser/assets/blog');
+})();
 
 export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
   try {
