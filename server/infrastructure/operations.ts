@@ -1,8 +1,24 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { parseISO, compareDesc } from 'date-fns';
+import fm from 'front-matter';
 import { parseHTML } from 'linkedom';
 import { capitalize, decodeHTMLEntities, HttpError } from "../utils";
 import { Mes, meses, TipoFestividad, HOLIDAY_MAP } from '@/shared/models/common';
 import { DiaFestivo, FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
 import { FindProvinciasResponse } from "@/shared/models/output/find-provincias.response";
+
+// Definimos la interfaz para los atributos del blog para evitar errores de 'unknown'
+interface BlogAttributes {
+  title?: string;
+  description?: string;
+  date?: string;
+  lastMod?: string;
+  [key: string]: any;
+}
+
+// En el entorno de SSR, calculamos la ruta base de los assets del blog
+const BLOG_ASSETS_PATH = path.resolve(process.cwd(), 'src/assets/blog');
 
 export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
   try {
@@ -37,14 +53,13 @@ export async function findFestivosProvincia(provincia: string, year: number): Pr
         const span = (li as Element).querySelector('span');
         if (!span) return null;
 
-        const dateText = span.textContent?.trim() || ''; // e.g. "01 de enero"
+        const dateText = span.textContent?.trim() || ''; 
         const diaString = dateText.split(' de ')[0];
         const dia = Number.parseInt(diaString);
 
         if (Number.isNaN(dia)) return null;
 
         const fullText = (li as Element).textContent?.trim() || '';
-        // The name is after the date and the separator (– or -)
         const nameFestividad = fullText.replace(dateText, '').replace(/^[–\s-]+/, '').trim();
 
         const classAttr = span.getAttribute('class') || '';
@@ -74,7 +89,6 @@ export async function getProvincias(): Promise<FindProvinciasResponse> {
   });
 
   if (!response.ok) {
-    // Fallback to a plain URL if the year-specific one fails
     const fallbackResponse = await fetch("https://www.calendarioslaborales.com/calendarios-laborales-2026-por-provincias.htm");
     if (!fallbackResponse.ok) return [];
     return parseProvincias(await fallbackResponse.text());
@@ -89,7 +103,6 @@ function parseProvincias(html: string): FindProvinciasResponse {
 
   return Array.from(elements).map((e) => {
     const href = e.getAttribute('href') || '';
-    // href is like "/calendario-laboral-madrid-2026.htm"
     const id = href.replace(/^\//, '').replace('calendario-laboral-', '').replace(/-20\d{2}\.htm$/, '');
     return {
       id: id,
@@ -118,4 +131,40 @@ export async function getYears() {
   }
 
   return yearsData;
+}
+
+export async function getBlogPosts() {
+  if (!fs.existsSync(BLOG_ASSETS_PATH)) return [];
+  
+  const files = fs.readdirSync(BLOG_ASSETS_PATH);
+  const mdFiles = files.filter(file => file.endsWith('.md'));
+
+  const posts = mdFiles.map(file => {
+    const filePath = path.join(BLOG_ASSETS_PATH, file);
+    const content = fs.readFileSync(filePath, 'utf8');
+    const result = fm<BlogAttributes>(content);
+    const { attributes } = result;
+
+    return {
+      slug: file.replace('.md', ''),
+      title: attributes.title || 'Sin título',
+      description: attributes.description || '',
+      date: attributes.date || '',
+      ...attributes
+    };
+  });
+
+  return posts.sort((a, b) => {
+    const dateA = a.date ? parseISO(a.date) : new Date(0);
+    const dateB = b.date ? parseISO(b.date) : new Date(0);
+    return compareDesc(dateA, dateB);
+  });
+}
+
+export async function getBlogPost(slug: string): Promise<string> {
+  const filePath = path.join(BLOG_ASSETS_PATH, `${slug}.md`);
+  if (!fs.existsSync(filePath)) {
+    throw new HttpError('Post not found', 404);
+  }
+  return fs.readFileSync(filePath, 'utf8');
 }

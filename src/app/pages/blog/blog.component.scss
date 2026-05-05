@@ -1,0 +1,19 @@
+::ng-deep {
+  .prose {
+    h1 {
+      @apply text-4xl font-extrabold text-gray-900 mb-6;
+    }
+    h2 {
+      @apply text-2xl font-bold text-indigo-900 mt-10 mb-4;
+    }
+    p {
+      @apply text-gray-700 leading-relaxed mb-6;
+    }
+    ul {
+      @apply list-disc pl-6 mb-6 text-gray-700;
+    }
+    li {
+      @apply mb-2;
+    }
+  }
+}

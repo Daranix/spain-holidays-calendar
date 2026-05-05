@@ -1,0 +1,37 @@
+<div class="max-w-3xl mx-auto px-6 py-12">
+  <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">Calculadora de Puentes</h1>
+  <p class="text-lg text-gray-600 text-center mb-10">Optimiza tus días libres. Descubre cómo conseguir más días de vacaciones seguidos gastando lo mínimo posible.</p>
+
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+    
+    <form [formGroup]="form" (ngSubmit)="calcular()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Días de vacaciones disponibles</label>
+          <input type="number" formControlName="diasDisponibles" min="1" max="30" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Provincia</label>
+          <select formControlName="provinciaSeleccionada" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border bg-white">
+            <option value="madrid">Madrid</option>
+            <option value="barcelona">Barcelona</option>
+            <option value="valencia">Valencia</option>
+            <option value="sevilla">Sevilla</option>
+            <option value="bizkaia">Bizkaia</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="form.invalid" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        Calcular Combinaciones
+      </button>
+    </form>
+
+    @if (resultado()) {
+      <div class="mt-8 bg-green-50 border border-green-200 rounded-xl p-6">
+        <h3 class="text-lg font-bold text-green-900 mb-3">¡Estrategia encontrada!</h3>
+        <p class="text-green-800 leading-relaxed">{{ resultado() }}</p>
+      </div>
+    }
+  </div>
+</div>

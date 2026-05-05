@@ -38,6 +38,22 @@ export const routes: Routes = [
         component: ContactoComponent
     },
     {
+        path: 'blog',
+        loadComponent: () => import('./pages/blog-list/blog-list.component').then(m => m.BlogListComponent)
+    },
+    {
+        path: 'blog/:slug',
+        loadComponent: () => import('./pages/blog/blog.component').then(m => m.BlogComponent)
+    },
+    {
+        path: 'desarrolladores',
+        loadComponent: () => import('./pages/developers/developers.component').then(m => m.DevelopersComponent)
+    },
+    {
+        path: 'calculadora-puentes',
+        loadComponent: () => import('./pages/calculadora-puentes/calculadora-puentes.component').then(m => m.CalculadoraPuentesComponent)
+    },
+    {
         path: '**',
         component: ErrorComponent
     }

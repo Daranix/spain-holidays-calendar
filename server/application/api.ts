@@ -1,6 +1,6 @@
 
 import { MemoryCacheStorage } from '../infrastructure/cache-manager';
-import { findFestivosProvincia, getProvincias, getYears } from '../infrastructure/operations';
+import { findFestivosProvincia, getBlogPost, getBlogPosts, getProvincias, getYears } from '../infrastructure/operations';
 import express from 'express';
 import { HttpError, stringToMilliseconds } from '../utils';
 
@@ -28,6 +28,20 @@ router.get('/provincias', (req, res, next) => {
     .then(provincias => res.json(provincias))
     .catch(next);
 });
+
+router.get('/blog', (req, res, next) => {
+  MemoryCacheStorage.register('blog_posts', () => getBlogPosts(), stringToMilliseconds('1h'))
+    .then(posts => res.json(posts))
+    .catch(next);
+});
+
+router.get('/blog/:slug', (req, res, next) => {
+  const { slug } = req.params;
+  MemoryCacheStorage.register(`blog_post_${slug}`, () => getBlogPost(slug), stringToMilliseconds('1h'))
+    .then(post => res.send(post))
+    .catch(next);
+});
+
 router.get('/ping', (req, res) => {
   res.json({ message: 'pong pong' });
 });

@@ -1,9 +1,11 @@
-import { RESPONSE } from '@/shared/di/tokens';
 import { Component, inject, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { RESPONSE } from '@/shared/di/tokens';
 
 @Component({
     selector: 'app-error',
-    imports: [],
+    standalone: true,
+    imports: [RouterLink],
     templateUrl: './error.component.html',
     styleUrl: './error.component.scss'
 })
@@ -19,5 +21,4 @@ export class ErrorComponent {
   goBack() {
     history.back();
   }
-
 }

@@ -9,6 +9,7 @@ interface MetaInfo {
   updateCanonical?: boolean;
   keywords?: string;
   thumbnail?: string;
+  noindex?: boolean;
 }
 
 @Injectable({
@@ -21,7 +22,7 @@ export class MetadataService {
   private readonly document = inject(DOCUMENT);
 
 
-  updateMetadata({ title, description, updateCanonical = true, keywords, thumbnail }: MetaInfo) {
+  updateMetadata({ title, description, updateCanonical = true, keywords, thumbnail, noindex = false }: MetaInfo) {
 
     this.title.setTitle(title);
     this.meta.updateTag({ property: 'og:title', content: title });
@@ -40,6 +41,12 @@ export class MetadataService {
 
     if (updateCanonical) {
       this.updateCanonnicalUrl();
+    }
+
+    if (noindex) {
+      this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
+    } else {
+      this.meta.updateTag({ name: 'robots', content: 'index, follow' });
     }
   }
 

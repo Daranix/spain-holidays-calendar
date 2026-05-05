@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { HolidayDescription } from '../../services/holiday-descriptions.service';
@@ -9,7 +9,7 @@ import { TipoFestividad, HOLIDAY_TYPES_CONFIG } from '@/shared/models/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="bg-white rounded-[32px] shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100 animate-in fade-in zoom-in duration-500">
+    <div class="bg-white rounded-[32px] shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100">
       <!-- Header -->
       <div class="relative p-10 text-white" [class]="getHeaderClass()">
         <button 
@@ -87,7 +87,26 @@ import { TipoFestividad, HOLIDAY_TYPES_CONFIG } from '@/shared/models/common';
       </div>
     </div>
   `,
+  encapsulation: ViewEncapsulation.None,
   styles: [`
+    .holiday-dialog-panel {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      animation: modal-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes modal-pop {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
     :host {
       display: block;
       perspective: 1000px;

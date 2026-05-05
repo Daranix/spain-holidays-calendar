@@ -40,6 +40,12 @@
                 <strong>{{ holidaySummary()?.total }} días festivos</strong> laborales. Estos días se distribuyen entre festividades 
                 nacionales comunes a toda España, días propios de la comunidad autónoma y festivos locales de cada municipio.
             </p>
+
+            @if(provinceDescription()) {
+                <div class="prose prose-indigo max-w-none text-indigo-900 bg-white/70 p-5 rounded-lg border border-indigo-100 mb-6 shadow-sm">
+                    <p class="text-sm leading-relaxed">{{ provinceDescription() }}</p>
+                </div>
+            }
             
             <div class="grid grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-indigo-100">

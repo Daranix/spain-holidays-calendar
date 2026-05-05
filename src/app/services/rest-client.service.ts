@@ -45,4 +45,21 @@ export class RestClientService {
   getPing(): Observable<any> {
     return this.httpClient.get<any>(`${this.API_BASE_URL}/ping`);
   }
+
+  getBlogPost(slug: string): Observable<string> {
+    return this.httpClient.get(`${this.API_BASE_URL}/blog/${slug}`, { responseType: 'text' });
+  }
+
+  getBlogPosts(): Observable<BlogPostSummary[]> {
+    return this.httpClient.get<BlogPostSummary[]>(`${this.API_BASE_URL}/blog`);
+  }
 }
+
+export interface BlogPostSummary {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  lastMod?: string;
+}
+

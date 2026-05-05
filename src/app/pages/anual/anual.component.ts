@@ -14,6 +14,7 @@ import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { SpinnerComponent } from '@/app/spinner/spinner.component';
 import { updateCanonnicalUrl } from '@/app/utils/common';
 import { MetadataService } from '@/app/services/metadata.service';
+import { getProvinceDescription } from '@/app/utils/province-info';
 
 @Component({
     selector: 'app-anual',
@@ -85,6 +86,8 @@ export class AnualComponent {
 
   readonly provinciasResource = toSignal(this.restClient.getProvincias());
 
+  readonly provinceDescription = computed(() => getProvinceDescription(this.provincia()));
+
   constructor() {
     updateCanonnicalUrl();
     this.updateMetadata();
@@ -103,10 +106,14 @@ export class AnualComponent {
     const totalMsg = summary ? `total de ${summary.total} días festivos` : 'listado de festivos';
     const description = `Calendario laboral completo de ${provincia} para el año ${year}. Consulta el ${totalMsg}, incluyendo Festivo Nacional, Festivo Autonómico y Festivo Local para planificar tus vacaciones y puentes.`;
     
+    // Solo indexar 2024, 2025 y 2026
+    const noindex = year < 2024 || year > 2026;
+
     this.metadataService.updateMetadata({
       title,
       description,
-      updateCanonical: true
+      updateCanonical: true,
+      noindex
     });
   }
 
