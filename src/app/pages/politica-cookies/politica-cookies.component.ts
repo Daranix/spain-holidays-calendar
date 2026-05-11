@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-politica-cookies',
-  standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
     <div class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
@@ -106,7 +105,7 @@ export class PoliticaCookiesComponent {
     this.topNavbarService.title.set('Política de Cookies');
     this.metadataService.updateMetadata({
       title: 'Política de Cookies - CalendarioVacaciones.com',
-      description: 'Información detallada sobre el uso de cookies y publicidad personalizada en este sitio web.',
+      description: 'Información detallada sobre las cookies utilizadas en CalendarioVacaciones.com: cookies técnicas, de análisis (Counterscale) y publicitarias (Google AdSense). Gestiona tus preferencias de privacidad.',
       updateCanonical: true
     });
   }

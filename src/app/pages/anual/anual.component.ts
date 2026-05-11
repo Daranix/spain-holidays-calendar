@@ -12,7 +12,6 @@ import { Capacitor } from '@capacitor/core';
 import { map, shareReplay, switchMap } from 'rxjs';
 import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { SpinnerComponent } from '@/app/spinner/spinner.component';
-import { updateCanonnicalUrl } from '@/app/utils/common';
 import { MetadataService } from '@/app/services/metadata.service';
 import { getProvinceDescription } from '@/app/utils/province-info';
 
@@ -89,7 +88,6 @@ export class AnualComponent {
   readonly provinceDescription = computed(() => getProvinceDescription(this.provincia()));
 
   constructor() {
-    updateCanonnicalUrl();
     this.updateMetadata();
     this.festivos$.pipe(takeUntilDestroyed()).subscribe(() => {
       this.updateMetadata();

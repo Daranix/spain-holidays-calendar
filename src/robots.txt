@@ -6,7 +6,7 @@ Allow: /
 Disallow: /api/
 Allow: /api/files/*
 Disallow: /error
-Disallow: /*?* # Block URLs with query parameters to avoid duplicate content
+Disallow: /*?*
 
 # Sitemap
-Sitemap: https://calendariovacaciones.com/sitemap.xml
+Sitemap: https://www.calendariovacaciones.com/sitemap.xml

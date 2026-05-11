@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-terminos-condiciones',
-  standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
     <div class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
@@ -99,7 +98,7 @@ export class TerminosCondicionesComponent {
     this.topNavbarService.title.set('Términos y Condiciones');
     this.metadataService.updateMetadata({
       title: 'Términos y Condiciones - CalendarioVacaciones.com',
-      description: 'Condiciones de uso, exención de responsabilidad y carácter abierto del proyecto CalendarioVacaciones.com.',
+      description: 'Condiciones de uso y exención de responsabilidad de CalendarioVacaciones.com, un proyecto de código abierto. Información sobre licencia, colaboración comunitaria y jurisdicción aplicable.',
       updateCanonical: true
     });
   }

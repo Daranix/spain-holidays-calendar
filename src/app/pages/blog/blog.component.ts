@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RestClientService } from '@/app/services/rest-client.service';
+import { MetadataService } from '@/app/services/metadata.service';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, switchMap, from } from 'rxjs';
 import { marked } from 'marked';
@@ -17,12 +18,12 @@ interface PostMetadata {
   date: string;
   lastMod?: string;
   excerpt?: string;
+  description?: string;
   [key: string]: unknown;
 }
 
 @Component({
   selector: 'app-blog',
-  standalone: true,
   imports: [CommonModule, ErrorComponent, RouterLink],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
@@ -31,6 +32,7 @@ export class BlogComponent {
   private route = inject(ActivatedRoute);
   private sanitizer = inject(DomSanitizer);
   private restClient = inject(RestClientService);
+  private metadataService = inject(MetadataService);
 
   readonly slug = toSignal(this.route.paramMap.pipe(map(params => params.get('slug')!)));
 
@@ -77,4 +79,26 @@ export class BlogComponent {
   });
 
   readonly isLoading = computed(() => this.postResource.isLoading());
+
+  constructor() {
+    this.postResource.value;
+    this.updateBlogMetadata();
+  }
+
+  private updateBlogMetadata(): void {
+    const slugValue = this.slug();
+    if (!slugValue) return;
+
+    const postValue = this.postResource.value();
+    if (!postValue?.metadata) return;
+
+    const meta = postValue.metadata;
+    const description = meta.description || meta.excerpt || `${meta.title} - Blog de CalendarioVacaciones.com. Guías y consejos sobre festivos laborales en España.`;
+
+    this.metadataService.updateMetadata({
+      title: `${meta.title} - Calendario Festivos España`,
+      description,
+      updateCanonical: true
+    });
+  }
 }
