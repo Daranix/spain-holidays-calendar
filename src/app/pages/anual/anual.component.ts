@@ -14,6 +14,7 @@ import { LOADING_INITIAL_VALUE, loading } from '@/app/utils/rx-pipes';
 import { SpinnerComponent } from '@/app/spinner/spinner.component';
 import { MetadataService } from '@/app/services/metadata.service';
 import { getProvinceDescription } from '@/app/utils/province-info';
+import { GoogleAdComponent } from '@/app/components/google-ad/google-ad.component';
 
 @Component({
     selector: 'app-anual',
@@ -23,7 +24,8 @@ import { getProvinceDescription } from '@/app/utils/province-info';
         CommonModule,
         SpinnerComponent,
         HolidayInfoSectionComponent,
-        RouterLink
+        RouterLink,
+        GoogleAdComponent
     ],
     providers: [
         TitleCasePipe

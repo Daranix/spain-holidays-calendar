@@ -100,6 +100,10 @@
             </p>
         </section>
 
+        <div class="flex justify-center my-6">
+            <app-google-ad></app-google-ad>
+        </div>
+
         <div class="grid md:grid-cols-2 lg:grid-cols-3 max-w-none px-6 pt-4 pb-16 gap-y-16 gap-x-6">
             @for(month of meses; track idx; let idx = $index) {
                 <app-calendar [year]="year()" [month]="idx+1" [festivos]="festivos().data![meses[idx]]!"></app-calendar>

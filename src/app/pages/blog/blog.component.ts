@@ -11,6 +11,7 @@ import fm from 'front-matter';
 
 import { CommonModule } from '@angular/common';
 import { ErrorComponent } from '../error/error.component';
+import { GoogleAdComponent } from '@/app/components/google-ad/google-ad.component';
 
 interface PostMetadata {
   title: string;
@@ -24,7 +25,7 @@ interface PostMetadata {
 
 @Component({
   selector: 'app-blog',
-  imports: [CommonModule, ErrorComponent, RouterLink],
+  imports: [CommonModule, ErrorComponent, RouterLink, GoogleAdComponent],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })

@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { RestClientService } from '@/app/services/rest-client.service';
 import { MetadataService } from '@/app/services/metadata.service';
 import { TopNavbarService } from '@/app/services/top-navbar.service';
+import { GoogleAdComponent } from '@/app/components/google-ad/google-ad.component';
 
 @Component({
   selector: 'app-blog-list',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, GoogleAdComponent],
   templateUrl: './blog-list.component.html',
   styleUrl: './blog-list.component.scss'
 })

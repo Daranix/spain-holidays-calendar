@@ -21,6 +21,9 @@
   }
 
   @if (content()) {
+    <div class="flex justify-center mb-8">
+      <app-google-ad></app-google-ad>
+    </div>
     <article class="prose prose-indigo lg:prose-xl max-w-none" [innerHTML]="content()"></article>
   } @else if (error()) {
     <app-error [statusCode]="errorCode()"></app-error>
