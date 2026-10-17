@@ -1,0 +1,93 @@
+name: Sync Holidays & Release
+
+on:
+  schedule:
+    # Run every Monday at 05:00 UTC during Oct, Nov, Dec (when BOE/CCAA publish calendars)
+    - cron: '0 5 * 10,11,12 1'
+    # Run once a month the rest of the year
+    - cron: '0 5 1 1-9 *'
+  workflow_dispatch:
+    inputs:
+      years:
+        description: 'Comma-separated years to sync (e.g. 2026,2027)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  sync-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run holiday sync script
+        run: |
+          if [ -n "${{ github.event.inputs.years }}" ]; then
+            npm run sync:holidays -- --years="${{ github.event.inputs.years }}"
+          else
+            npm run sync:holidays
+          fi
+
+      - name: Check for dataset changes
+        id: git_status
+        run: |
+          git status --porcelain src/assets/data
+          if [ -n "$(git status --porcelain src/assets/data)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Changes detected in holiday datasets."
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No changes detected in holiday datasets."
+          fi
+
+      - name: Run API Integration Tests
+        if: steps.git_status.outputs.has_changes == 'true'
+        run: npm run test:api
+
+      - name: Install Playwright Browsers
+        if: steps.git_status.outputs.has_changes == 'true'
+        run: npx playwright install chromium --with-deps
+
+      - name: Run E2E Tests
+        if: steps.git_status.outputs.has_changes == 'true'
+        run: npm run test:e2e
+
+      - name: Commit, Bump Version and Tag
+        if: steps.git_status.outputs.has_changes == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage dataset files
+          git add server/data src/assets/data
+
+          # Bump patch version in package.json without creating git tag yet
+          NEW_VERSION=$(npm version patch --no-git-tag-version)
+          git add package.json package-lock.json
+
+          # Commit changes
+          git commit -m "chore(data): update holiday datasets to ${NEW_VERSION} [skip ci]"
+
+          # Create annotated git tag (vX.Y.Z) to trigger build.yml workflow
+          git tag -a "${NEW_VERSION}" -m "Release ${NEW_VERSION} - Automated holiday update"
+
+          # Push commit and tag
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin "${NEW_VERSION}"
+

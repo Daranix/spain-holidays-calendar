@@ -1,11 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseISO, compareDesc } from 'date-fns';
 import fm from 'front-matter';
-import { parseHTML } from 'linkedom';
-import { capitalize, decodeHTMLEntities, HttpError } from "../utils";
-import { Mes, meses, TipoFestividad, HOLIDAY_MAP } from '@/shared/models/common';
-import { DiaFestivo, FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
+import { HttpError } from "../utils";
+import { FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
 import { FindProvinciasResponse } from "@/shared/models/output/find-provincias.response";
 
 // Definimos la interfaz para los atributos del blog para evitar errores de 'unknown'
@@ -17,12 +16,8 @@ interface BlogAttributes {
   [key: string]: any;
 }
 
-import { fileURLToPath } from 'node:url';
-
-// En el entorno de SSR, calculamos la ruta base de los assets del blog de forma dinámica
-// para que funcione tanto en desarrollo como tras el build (producción)
+// Dynamic assets path resolution (dev src/assets vs production dist/browser/assets)
 const BLOG_ASSETS_PATH = (() => {
-  // Intentamos obtener la ruta relativa al archivo bundleado (como en server.ts)
   const serverDistFolder = path.dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = path.resolve(serverDistFolder, '../browser');
   const distPath = path.join(browserDistFolder, 'assets/blog');
@@ -31,105 +26,56 @@ const BLOG_ASSETS_PATH = (() => {
     return distPath;
   }
 
-  // Fallback para desarrollo (ng serve o ejecución desde raíz)
   const devPath = path.resolve(process.cwd(), 'src/assets/blog');
   if (fs.existsSync(devPath)) {
     return devPath;
   }
 
-  // Fallback para otros casos (dist relativo a cwd)
   return path.resolve(process.cwd(), 'dist/browser/assets/blog');
 })();
 
-export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
-  try {
-    const response = await fetch(
-      `https://www.calendarioslaborales.com/calendario-laboral-${provincia}-${year}.htm`,
-    );
+const DATA_ASSETS_PATH = (() => {
+  const serverDistFolder = path.dirname(fileURLToPath(import.meta.url));
+  const browserDistFolder = path.resolve(serverDistFolder, '../browser');
+  const distPath = path.join(browserDistFolder, 'assets/data');
 
-    if (!response.ok) {
-      throw new HttpError(`${provincia} not found for year ${year}`, 404);
-    }
-
-    const html = await response.text();
-    const { document } = parseHTML(html);
-
-    const monthElements = Array.from(document.querySelectorAll('.month'));
-
-    if (monthElements.length === 0) {
-      throw new HttpError(`${provincia} not found`, 404);
-    }
-
-    const mapFestivos: Map<Mes, Array<DiaFestivo>> = new Map();
-    for (const element of monthElements) {
-      const monthNameText = element.querySelector('.month-name')?.textContent?.trim().toLowerCase() as Mes;
-
-      if (!monthNameText || !meses.includes(monthNameText)) {
-        continue;
-      }
-
-      const holidayItems = Array.from(element.querySelectorAll('.month-holidays li'));
-
-      const listaFestivos = holidayItems.map((li) => {
-        const span = (li as Element).querySelector('span');
-        if (!span) return null;
-
-        const dateText = span.textContent?.trim() || ''; 
-        const diaString = dateText.split(' de ')[0];
-        const dia = Number.parseInt(diaString);
-
-        if (Number.isNaN(dia)) return null;
-
-        const fullText = (li as Element).textContent?.trim() || '';
-        const nameFestividad = fullText.replace(dateText, '').replace(/^[–\s-]+/, '').trim();
-
-        const classAttr = span.getAttribute('class') || '';
-        const holidayKey = (Object.keys(HOLIDAY_MAP) as Array<keyof typeof HOLIDAY_MAP>)
-          .find(cls => classAttr.includes(cls));
-
-        const festividad: TipoFestividad = holidayKey ? HOLIDAY_MAP[holidayKey].val : 'local';
-
-        return { dia, nameFestividad, festividad };
-      }).filter(f => f !== null) as Array<DiaFestivo>;
-
-      mapFestivos.set(monthNameText, listaFestivos);
-    }
-
-    return Object.fromEntries(mapFestivos.entries());
-  } catch (ex) {
-    if (ex instanceof HttpError) throw ex;
-    const err = ex as any;
-    throw new HttpError(err.message, err.statusCode || 500);
+  if (fs.existsSync(distPath)) {
+    return distPath;
   }
+
+  const devPath = path.resolve(process.cwd(), 'src/assets/data');
+  if (fs.existsSync(devPath)) {
+    return devPath;
+  }
+
+  return path.resolve(process.cwd(), 'dist/browser/assets/data');
+})();
+
+export async function findFestivosProvincia(provincia: string, year: number): Promise<FindFestivosProvinciaResponse> {
+  const yearFile = path.join(DATA_ASSETS_PATH, 'festivos', `${year}.json`);
+  if (!fs.existsSync(yearFile)) {
+    throw new HttpError(`Festivos not found for year ${year}`, 404);
+  }
+
+  const raw = fs.readFileSync(yearFile, 'utf-8');
+  const yearData = JSON.parse(raw);
+  const provinceData = yearData[provincia.toLowerCase()];
+
+  if (!provinceData) {
+    throw new HttpError(`Festivos not found for ${provincia} in ${year}`, 404);
+  }
+
+  return provinceData;
 }
 
 export async function getProvincias(): Promise<FindProvinciasResponse> {
-  const currentYear = new Date().getFullYear();
-  const response = await fetch(`https://www.calendarioslaborales.com/calendarios-laborales-${currentYear}-por-provincias.htm`, {
-    method: "GET",
-  });
-
-  if (!response.ok) {
-    const fallbackResponse = await fetch("https://www.calendarioslaborales.com/calendarios-laborales-2026-por-provincias.htm");
-    if (!fallbackResponse.ok) return [];
-    return parseProvincias(await fallbackResponse.text());
+  const provFile = path.join(DATA_ASSETS_PATH, 'provincias.json');
+  if (!fs.existsSync(provFile)) {
+    throw new HttpError('Provincias dataset not found', 404);
   }
 
-  return parseProvincias(await response.text());
-}
-
-function parseProvincias(html: string): FindProvinciasResponse {
-  const { document } = parseHTML(html);
-  const elements = document.querySelectorAll('.calendar-geo-card');
-
-  return Array.from(elements).map((e) => {
-    const href = e.getAttribute('href') || '';
-    const id = href.replace(/^\//, '').replace('calendario-laboral-', '').replace(/-20\d{2}\.htm$/, '');
-    return {
-      id: id,
-      label: e.querySelector('.calendar-geo-title')?.textContent?.trim() || id,
-    };
-  }).filter(p => p.id && p.label);
+  const raw = fs.readFileSync(provFile, 'utf-8');
+  return JSON.parse(raw) as FindProvinciasResponse;
 }
 
 export async function getYears() {
