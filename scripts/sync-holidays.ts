@@ -225,8 +225,9 @@ async function syncOfficialHolidays() {
         const parsed = parseBoeXml(xml, year);
         yearData = parsed.provincesHolidays;
         console.log(`✓ ${year}: Parsed official BOE resolution (${boeId}) - ${parsed.titulo}`);
-      } catch (err: any) {
-        console.warn(`! ${year}: BOE table not structured in XML (${err.message}). Using official statutory holidays.`);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn(`! ${year}: BOE table not structured in XML (${msg}). Using official statutory holidays.`);
         yearData = createStatutoryYearData(year);
       }
     } else {

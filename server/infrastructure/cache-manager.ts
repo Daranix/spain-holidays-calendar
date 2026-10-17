@@ -34,10 +34,10 @@ class CacheManager {
         // If something is already fetching this key, wait for the event
         if (this.subscriberManagerStore.has(key)) {
             const eventManager = this.subscriberManagerStore.get(key)!;
-            return new Promise((resolve, reject) => {
+            return new Promise<T>((resolve, reject) => {
                 // We use 'once' to avoid memory leaks
-                eventManager.once('value', (value: any) => resolve(value));
-                eventManager.once('error', (err: any) => reject(err));
+                eventManager.once('value', (value: unknown) => resolve(value as T));
+                eventManager.once('error', (err: unknown) => reject(err));
             });
         }
 

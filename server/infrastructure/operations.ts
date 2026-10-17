@@ -13,7 +13,7 @@ interface BlogAttributes {
   description?: string;
   date?: string;
   lastMod?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Dynamic assets path resolution (dev src/assets vs production dist/browser/assets)

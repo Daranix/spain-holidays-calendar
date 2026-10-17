@@ -2,7 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
@@ -20,9 +19,9 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "paths": {
-      "@/*": ["src/*"],
-      "@/server/*": ["server/*"],
-      "@/shared/*": ["shared/*"]
+      "@/*": ["./src/*"],
+      "@/server/*": ["./server/*"],
+      "@/shared/*": ["./shared/*"]
     }
   },
   "angularCompilerOptions": {

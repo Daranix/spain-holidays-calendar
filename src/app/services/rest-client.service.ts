@@ -1,7 +1,6 @@
 import { Injectable, PLATFORM_ID, REQUEST, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { isPlatformBrowser } from "@angular/common";
 import { Capacitor } from "@capacitor/core";
 import { FindFestivosProvinciaResponse } from "@/shared/models/output/find-festivos-provincia.response";
 import { FindFestivosProvinciaRequest } from "@/shared/models/input/find-festivos-provincia.request";
@@ -42,8 +41,8 @@ export class RestClientService {
     return this.httpClient.get<FindProvinciasResponse>(`${this.API_BASE_URL}/provincias`);
   }
 
-  getPing(): Observable<any> {
-    return this.httpClient.get<any>(`${this.API_BASE_URL}/ping`);
+  getPing(): Observable<PingResponse> {
+    return this.httpClient.get<PingResponse>(`${this.API_BASE_URL}/ping`);
   }
 
   getBlogPost(slug: string): Observable<string> {
@@ -61,5 +60,9 @@ export interface BlogPostSummary {
   description: string;
   date: string;
   lastMod?: string;
+}
+
+export interface PingResponse {
+  message: string;
 }
 

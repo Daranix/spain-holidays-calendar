@@ -9,23 +9,56 @@ export interface BoeParsedData {
   provincesHolidays: Record<string, FindFestivosProvinciaResponse>;
 }
 
-function extractText(node: any): string {
+export interface BoeAbbrNode {
+  '#text'?: string | number;
+  '@_title'?: string;
+  [key: string]: unknown;
+}
+
+export interface BoeCellNode {
+  '#text'?: string | number;
+  '@_headers'?: string;
+  '@_id'?: string;
+  '@_axis'?: string;
+  p?: BoeCellNode | string | number;
+  abbr?: BoeAbbrNode;
+  strong?: BoeCellNode | string | number;
+  em?: BoeCellNode | string | number;
+  b?: BoeCellNode | string | number;
+  span?: BoeCellNode | string | number;
+  [key: string]: unknown;
+}
+
+export interface BoeRowNode {
+  th?: BoeCellNode | BoeCellNode[];
+  td?: BoeCellNode | BoeCellNode[];
+  [key: string]: unknown;
+}
+
+function extractText(node: unknown): string {
   if (!node) return '';
   if (typeof node === 'string') return node;
   if (typeof node === 'number') return node.toString();
-  if (node['#text']) return node['#text'].toString();
-  if (node.p) return extractText(node.p);
-  if (node.strong) return extractText(node.strong);
-  if (node.em) return extractText(node.em);
-  if (node.b) return extractText(node.b);
-  if (node.span) return extractText(node.span);
+  if (typeof node === 'object') {
+    const obj = node as Record<string, unknown>;
+    if (obj['#text'] !== undefined && obj['#text'] !== null) return String(obj['#text']);
+    if (obj['p'] !== undefined) return extractText(obj['p']);
+    if (obj['strong'] !== undefined) return extractText(obj['strong']);
+    if (obj['em'] !== undefined) return extractText(obj['em']);
+    if (obj['b'] !== undefined) return extractText(obj['b']);
+    if (obj['span'] !== undefined) return extractText(obj['span']);
+  }
   return '';
 }
 
-function findAbbr(cell: any): any {
-  if (!cell) return null;
-  if (cell.abbr) return cell.abbr;
-  if (cell.p && cell.p.abbr) return cell.p.abbr;
+function findAbbr(cell: unknown): BoeAbbrNode | null {
+  if (!cell || typeof cell !== 'object') return null;
+  const obj = cell as Record<string, unknown>;
+  if (obj['abbr'] && typeof obj['abbr'] === 'object') return obj['abbr'] as BoeAbbrNode;
+  if (obj['p'] && typeof obj['p'] === 'object') {
+    const pObj = obj['p'] as Record<string, unknown>;
+    if (pObj['abbr'] && typeof pObj['abbr'] === 'object') return pObj['abbr'] as BoeAbbrNode;
+  }
   return null;
 }
 
@@ -53,7 +86,7 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
   }
 
   // 1. Collect all rows from table.tr, table.tbody.tr, or table.thead.tr
-  const allRows: any[] = [];
+  const allRows: BoeRowNode[] = [];
   if (Array.isArray(table.tr)) {
     allRows.push(...table.tr);
   } else if (table.tr) {
@@ -73,10 +106,10 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
   // 2. Identify column index to CCAA fallback mapping
   let colIndexToCcaa: string[] = [];
   for (const row of allRows) {
-    const ths = Array.isArray(row.th) ? row.th : (row.th ? [row.th] : []);
+    const ths: BoeCellNode[] = Array.isArray(row.th) ? row.th : (row.th ? [row.th] : []);
     if (ths.length >= 10) {
-      colIndexToCcaa = ths.map((th: any) => {
-        const rawId = th['@_id'] || '';
+      colIndexToCcaa = ths.map((th: BoeCellNode) => {
+        const rawId = (typeof th['@_id'] === 'string' ? th['@_id'] : '') || '';
         return CCAA_HEADER_MAP[rawId] || rawId.toLowerCase();
       });
       break;
@@ -93,7 +126,7 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
   let currentMonth: Mes | null = null;
 
   for (const row of allRows) {
-    const cells = Array.isArray(row.td) ? row.td : (row.td ? [row.td] : []);
+    const cells: BoeCellNode[] = Array.isArray(row.td) ? row.td : (row.td ? [row.td] : []);
     if (cells.length === 0) continue;
 
     const firstCell = cells[0];
@@ -118,7 +151,7 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
       const nameFestividad = textContent.replace(/^\d+\s*/, '').replace(/\.$/, '').trim();
 
       // Check each CCAA cell using two passes to prevent anomalies from malformed BOE rows
-      const rowAssignments: Array<{ cellIndex: number; ccaaId: string; abbr: any }> = [];
+      const rowAssignments: Array<{ cellIndex: number; ccaaId: string; abbr: BoeAbbrNode }> = [];
       const assignedCcaas = new Set<string>();
 
       // Pass 1: explicit header mapping
@@ -127,7 +160,8 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
         const abbr = findAbbr(cell);
         if (!abbr) continue;
 
-        const headersAttr = (cell && typeof cell === 'object') ? (cell['@_headers'] || (cell.p && cell.p['@_headers']) || '') : '';
+        const pNode = cell.p && typeof cell.p === 'object' ? (cell.p as Record<string, unknown>) : null;
+        const headersAttr = (typeof cell['@_headers'] === 'string' ? cell['@_headers'] : (pNode && typeof pNode['@_headers'] === 'string' ? pNode['@_headers'] : '')) || '';
         if (headersAttr) {
           const parts = headersAttr.split(/\s+/);
           const headerPart = parts.find((p: string) => CCAA_HEADER_MAP[p]);
@@ -149,7 +183,8 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
         const abbr = findAbbr(cell);
         if (!abbr) continue;
 
-        const headersAttr = (cell && typeof cell === 'object') ? (cell['@_headers'] || (cell.p && cell.p['@_headers']) || '') : '';
+        const pNode = cell.p && typeof cell.p === 'object' ? (cell.p as Record<string, unknown>) : null;
+        const headersAttr = (typeof cell['@_headers'] === 'string' ? cell['@_headers'] : (pNode && typeof pNode['@_headers'] === 'string' ? pNode['@_headers'] : '')) || '';
         const alreadyAssigned = rowAssignments.some(r => r.cellIndex === i);
         if (!alreadyAssigned && !headersAttr && unassignedIdx < unassignedCcaas.length) {
           const ccaaId = unassignedCcaas[unassignedIdx++];
@@ -162,7 +197,7 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
       for (const { ccaaId, abbr } of rowAssignments) {
         if (!ccaaId || !ccaaHolidays[ccaaId]) continue;
 
-        const abbrTitle = abbr['@_title'] || '';
+        const abbrTitle = typeof abbr['@_title'] === 'string' ? abbr['@_title'] : '';
         const isAutonomico = abbrTitle.toLowerCase().includes('comunidad autónoma');
         const festividad: TipoFestividad = isAutonomico ? 'autonomico' : 'nacional';
 
@@ -190,16 +225,30 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
 
     // Canary Islands specific: Statutory insular autonomic feast published in BOE footnotes
     if (prov.id === 'las-palmas') {
-      const sept = provincesHolidays[prov.id].septiembre;
-      if (!sept.some(h => h.dia === 8)) {
-        sept.push({ dia: 8, nameFestividad: 'Nuestra Señora del Pino', festividad: 'autonomico' });
-        sept.sort((a, b) => a.dia - b.dia);
+      const targetProv = provincesHolidays[prov.id];
+      if (targetProv) {
+        let sept = targetProv.septiembre;
+        if (!sept) {
+          sept = [];
+          targetProv.septiembre = sept;
+        }
+        if (!sept.some(h => h.dia === 8)) {
+          sept.push({ dia: 8, nameFestividad: 'Nuestra Señora del Pino', festividad: 'autonomico' });
+          sept.sort((a, b) => a.dia - b.dia);
+        }
       }
     } else if (prov.id === 'santa-cruz-de-tenerife') {
-      const feb = provincesHolidays[prov.id].febrero;
-      if (!feb.some(h => h.dia === 2)) {
-        feb.push({ dia: 2, nameFestividad: 'Virgen de Candelaria', festividad: 'autonomico' });
-        feb.sort((a, b) => a.dia - b.dia);
+      const targetProv = provincesHolidays[prov.id];
+      if (targetProv) {
+        let feb = targetProv.febrero;
+        if (!feb) {
+          feb = [];
+          targetProv.febrero = feb;
+        }
+        if (!feb.some(h => h.dia === 2)) {
+          feb.push({ dia: 2, nameFestividad: 'Virgen de Candelaria', festividad: 'autonomico' });
+          feb.sort((a, b) => a.dia - b.dia);
+        }
       }
     }
   }

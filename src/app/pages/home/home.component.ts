@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
@@ -38,8 +37,8 @@ export class HomeComponent {
     stream: () => this.restClient.getYears()
   });
 
-  readonly yearsGrouped = computed(() => {
-    const groups: Record<string, any[]> = {};
+  readonly yearsGrouped = computed<Array<[string, number[]]>>(() => {
+    const groups: Record<string, number[]> = {};
     const years = this.yearsResource.value() || [];
     for (const year of years) {
       if (!groups[year.groupName]) {
