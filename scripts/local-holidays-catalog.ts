@@ -285,8 +285,8 @@ export function getLocalHolidaysForCapital(
       break;
 
     case 'las-palmas': // Las Palmas de Gran Canaria
+      pickCandidate([{ date: martesCarnaval, name: 'Martes de Carnaval' }]);
       pickCandidate([{ date: new Date(Date.UTC(year, 5, 24)), name: 'San Juan' }]);
-      pickCandidate([{ date: new Date(Date.UTC(year, 8, 8)), name: 'Nuestra Señora del Pino' }]);
       break;
 
     case 'leon':

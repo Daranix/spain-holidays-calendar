@@ -92,6 +92,76 @@ function createStatutoryYearData(year: number): Record<string, FindFestivosProvi
       });
     }
 
+    // 4. Institutional/statutory autonomic day for each Comunidad Autónoma
+    const lunesPascua = new Date(easter.getTime() + 1 * 86400000);
+    switch (prov.comunidadId) {
+      case 'andalucia':
+        monthsMap.febrero.push({ dia: 28, nameFestividad: 'Día de Andalucía', festividad: 'autonomico' });
+        break;
+      case 'aragon':
+        monthsMap.abril.push({ dia: 23, nameFestividad: 'San Jorge, Día de Aragón', festividad: 'autonomico' });
+        break;
+      case 'asturias':
+        monthsMap.septiembre.push({ dia: 8, nameFestividad: 'Día de Asturias', festividad: 'autonomico' });
+        break;
+      case 'baleares':
+        monthsMap.marzo.push({ dia: 1, nameFestividad: 'Día de las Illes Balears', festividad: 'autonomico' });
+        break;
+      case 'canarias':
+        monthsMap.mayo.push({ dia: 30, nameFestividad: 'Día de Canarias', festividad: 'autonomico' });
+        if (prov.id === 'las-palmas') {
+          monthsMap.septiembre.push({ dia: 8, nameFestividad: 'Nuestra Señora del Pino', festividad: 'autonomico' });
+        } else {
+          monthsMap.febrero.push({ dia: 2, nameFestividad: 'Virgen de Candelaria', festividad: 'autonomico' });
+        }
+        // In Canarias, one national substitutable holiday is replaced by the insular feast to respect the 14-day limit
+        monthsMap.diciembre = monthsMap.diciembre.filter(h => h.nameFestividad !== 'Día de la Constitución Española');
+        break;
+      case 'cantabria':
+        monthsMap.julio.push({ dia: 28, nameFestividad: 'Día de las Instituciones de Cantabria', festividad: 'autonomico' });
+        break;
+      case 'castilla-la-mancha':
+        monthsMap.mayo.push({ dia: 31, nameFestividad: 'Día de Castilla-La Mancha', festividad: 'autonomico' });
+        break;
+      case 'castilla-y-leon':
+        monthsMap.abril.push({ dia: 23, nameFestividad: 'Día de Castilla y León', festividad: 'autonomico' });
+        break;
+      case 'cataluna':
+        monthsMap[meses[lunesPascua.getUTCMonth()]].push({ dia: lunesPascua.getUTCDate(), nameFestividad: 'Lunes de Pascua', festividad: 'autonomico' });
+        monthsMap.septiembre.push({ dia: 11, nameFestividad: 'Fiesta Nacional de Cataluña', festividad: 'autonomico' });
+        break;
+      case 'extremadura':
+        monthsMap.septiembre.push({ dia: 8, nameFestividad: 'Día de Extremadura', festividad: 'autonomico' });
+        break;
+      case 'galicia':
+        monthsMap.julio.push({ dia: 25, nameFestividad: 'Día Nacional de Galicia', festividad: 'autonomico' });
+        break;
+      case 'madrid':
+        monthsMap.mayo.push({ dia: 2, nameFestividad: 'Fiesta de la Comunidad de Madrid', festividad: 'autonomico' });
+        break;
+      case 'murcia':
+        monthsMap.junio.push({ dia: 9, nameFestividad: 'Día de la Región de Murcia', festividad: 'autonomico' });
+        break;
+      case 'navarra':
+        monthsMap.diciembre.push({ dia: 3, nameFestividad: 'San Francisco Javier / Día de Navarra', festividad: 'autonomico' });
+        break;
+      case 'pais-vasco':
+        monthsMap.julio.push({ dia: 25, nameFestividad: 'Santiago Apóstol', festividad: 'autonomico' });
+        break;
+      case 'la-rioja':
+        monthsMap.junio.push({ dia: 9, nameFestividad: 'Día de La Rioja', festividad: 'autonomico' });
+        break;
+      case 'valencia':
+        monthsMap.octubre.push({ dia: 9, nameFestividad: 'Día de la Comunitat Valenciana', festividad: 'autonomico' });
+        break;
+      case 'ceuta':
+        monthsMap.septiembre.push({ dia: 2, nameFestividad: 'Día de Ceuta', festividad: 'autonomico' });
+        break;
+      case 'melilla':
+        monthsMap.septiembre.push({ dia: 17, nameFestividad: 'Día de Melilla', festividad: 'autonomico' });
+        break;
+    }
+
     for (const m of meses) {
       monthsMap[m].sort((a, b) => a.dia - b.dia);
     }

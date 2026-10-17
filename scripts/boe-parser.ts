@@ -117,26 +117,49 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
       const dia = Number.parseInt(dayMatch[1], 10);
       const nameFestividad = textContent.replace(/^\d+\s*/, '').replace(/\.$/, '').trim();
 
-      // Check each CCAA cell
+      // Check each CCAA cell using two passes to prevent anomalies from malformed BOE rows
+      const rowAssignments: Array<{ cellIndex: number; ccaaId: string; abbr: any }> = [];
+      const assignedCcaas = new Set<string>();
+
+      // Pass 1: explicit header mapping
       for (let i = 1; i < cells.length; i++) {
         const cell = cells[i];
         const abbr = findAbbr(cell);
         if (!abbr) continue;
 
-        // Try getting CCAA from @_headers attribute first
         const headersAttr = (cell && typeof cell === 'object') ? (cell['@_headers'] || (cell.p && cell.p['@_headers']) || '') : '';
-        let ccaaId = '';
         if (headersAttr) {
           const parts = headersAttr.split(/\s+/);
           const headerPart = parts.find((p: string) => CCAA_HEADER_MAP[p]);
-          if (headerPart) ccaaId = CCAA_HEADER_MAP[headerPart];
+          if (headerPart) {
+            const ccaaId = CCAA_HEADER_MAP[headerPart];
+            if (!assignedCcaas.has(ccaaId)) {
+              rowAssignments.push({ cellIndex: i, ccaaId, abbr });
+              assignedCcaas.add(ccaaId);
+            }
+          }
         }
+      }
 
-        // Fallback to column index
-        if (!ccaaId && colIndexToCcaa[i - 1]) {
-          ccaaId = colIndexToCcaa[i - 1];
+      // Pass 2: unmapped cells with abbreviations get assigned to remaining unassigned CCAAs
+      const unassignedCcaas = colIndexToCcaa.filter(c => !assignedCcaas.has(c));
+      let unassignedIdx = 0;
+      for (let i = 1; i < cells.length; i++) {
+        const cell = cells[i];
+        const abbr = findAbbr(cell);
+        if (!abbr) continue;
+
+        const headersAttr = (cell && typeof cell === 'object') ? (cell['@_headers'] || (cell.p && cell.p['@_headers']) || '') : '';
+        const alreadyAssigned = rowAssignments.some(r => r.cellIndex === i);
+        if (!alreadyAssigned && !headersAttr && unassignedIdx < unassignedCcaas.length) {
+          const ccaaId = unassignedCcaas[unassignedIdx++];
+          rowAssignments.push({ cellIndex: i, ccaaId, abbr });
+          assignedCcaas.add(ccaaId);
         }
+      }
 
+      // Apply assignments to holiday map
+      for (const { ccaaId, abbr } of rowAssignments) {
         if (!ccaaId || !ccaaHolidays[ccaaId]) continue;
 
         const abbrTitle = abbr['@_title'] || '';
@@ -163,6 +186,21 @@ export function parseBoeXml(xmlContent: string, fallbackYear?: number): BoeParse
       provincesHolidays[prov.id] = JSON.parse(JSON.stringify(ccaaHols));
     } else {
       provincesHolidays[prov.id] = createEmptyMonthsMap();
+    }
+
+    // Canary Islands specific: Statutory insular autonomic feast published in BOE footnotes
+    if (prov.id === 'las-palmas') {
+      const sept = provincesHolidays[prov.id].septiembre;
+      if (!sept.some(h => h.dia === 8)) {
+        sept.push({ dia: 8, nameFestividad: 'Nuestra Señora del Pino', festividad: 'autonomico' });
+        sept.sort((a, b) => a.dia - b.dia);
+      }
+    } else if (prov.id === 'santa-cruz-de-tenerife') {
+      const feb = provincesHolidays[prov.id].febrero;
+      if (!feb.some(h => h.dia === 2)) {
+        feb.push({ dia: 2, nameFestividad: 'Virgen de Candelaria', festividad: 'autonomico' });
+        feb.sort((a, b) => a.dia - b.dia);
+      }
     }
   }
 

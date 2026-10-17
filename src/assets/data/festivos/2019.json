@@ -1217,7 +1217,13 @@
       }
     ],
     "febrero": [],
-    "marzo": [],
+    "marzo": [
+      {
+        "dia": 5,
+        "nameFestividad": "Martes de Carnaval",
+        "festividad": "local"
+      }
+    ],
     "abril": [
       {
         "dia": 18,
@@ -1261,7 +1267,7 @@
       {
         "dia": 8,
         "nameFestividad": "Nuestra Señora del Pino",
-        "festividad": "local"
+        "festividad": "autonomico"
       }
     ],
     "octubre": [
@@ -1304,7 +1310,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 2,
+        "nameFestividad": "Virgen de Candelaria",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 5,

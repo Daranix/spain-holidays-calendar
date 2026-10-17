@@ -12,7 +12,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -103,6 +109,11 @@
         "dia": 8,
         "nameFestividad": "Lunes de Carnaval",
         "festividad": "local"
+      },
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
       }
     ],
     "marzo": [
@@ -185,7 +196,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -277,7 +294,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -358,7 +381,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -445,7 +474,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -532,7 +567,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -619,7 +660,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 28,
+        "nameFestividad": "Día de Andalucía",
+        "festividad": "autonomico"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -723,7 +770,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "San Jorge, Día de Aragón",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -809,7 +862,13 @@
         "festividad": "local"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "San Jorge, Día de Aragón",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -901,7 +960,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "San Jorge, Día de Aragón",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -1001,6 +1066,11 @@
     ],
     "septiembre": [
       {
+        "dia": 8,
+        "nameFestividad": "Día de Asturias",
+        "festividad": "autonomico"
+      },
+      {
         "dia": 21,
         "nameFestividad": "San Mateo",
         "festividad": "local"
@@ -1058,6 +1128,11 @@
     ],
     "febrero": [],
     "marzo": [
+      {
+        "dia": 1,
+        "nameFestividad": "Día de las Illes Balears",
+        "festividad": "autonomico"
+      },
       {
         "dia": 25,
         "nameFestividad": "Jueves Santo",
@@ -1137,7 +1212,13 @@
         "festividad": "nacional"
       }
     ],
-    "febrero": [],
+    "febrero": [
+      {
+        "dia": 9,
+        "nameFestividad": "Martes de Carnaval",
+        "festividad": "local"
+      }
+    ],
     "marzo": [
       {
         "dia": 25,
@@ -1156,6 +1237,11 @@
         "dia": 1,
         "nameFestividad": "Fiesta del Trabajo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 30,
+        "nameFestividad": "Día de Canarias",
+        "festividad": "autonomico"
       }
     ],
     "junio": [
@@ -1177,7 +1263,7 @@
       {
         "dia": 8,
         "nameFestividad": "Nuestra Señora del Pino",
-        "festividad": "local"
+        "festividad": "autonomico"
       }
     ],
     "octubre": [
@@ -1195,11 +1281,6 @@
       }
     ],
     "diciembre": [
-      {
-        "dia": 6,
-        "nameFestividad": "Día de la Constitución Española",
-        "festividad": "nacional"
-      },
       {
         "dia": 8,
         "nameFestividad": "Inmaculada Concepción",
@@ -1226,6 +1307,11 @@
       }
     ],
     "febrero": [
+      {
+        "dia": 2,
+        "nameFestividad": "Virgen de Candelaria",
+        "festividad": "autonomico"
+      },
       {
         "dia": 9,
         "nameFestividad": "Martes de Carnaval",
@@ -1255,6 +1341,11 @@
         "dia": 3,
         "nameFestividad": "Día de la Cruz",
         "festividad": "local"
+      },
+      {
+        "dia": 30,
+        "nameFestividad": "Día de Canarias",
+        "festividad": "autonomico"
       }
     ],
     "junio": [],
@@ -1282,11 +1373,6 @@
       }
     ],
     "diciembre": [
-      {
-        "dia": 6,
-        "nameFestividad": "Día de la Constitución Española",
-        "festividad": "nacional"
-      },
       {
         "dia": 8,
         "nameFestividad": "Inmaculada Concepción",
@@ -1339,6 +1425,11 @@
         "dia": 25,
         "nameFestividad": "Santiago Apóstol",
         "festividad": "local"
+      },
+      {
+        "dia": 28,
+        "nameFestividad": "Día de las Instituciones de Cantabria",
+        "festividad": "autonomico"
       }
     ],
     "agosto": [
@@ -1418,6 +1509,11 @@
         "dia": 1,
         "nameFestividad": "Fiesta del Trabajo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 31,
+        "nameFestividad": "Día de Castilla-La Mancha",
+        "festividad": "autonomico"
       }
     ],
     "junio": [
@@ -1511,6 +1607,11 @@
         "dia": 17,
         "nameFestividad": "Lunes del Alarcos",
         "festividad": "local"
+      },
+      {
+        "dia": 31,
+        "nameFestividad": "Día de Castilla-La Mancha",
+        "festividad": "autonomico"
       }
     ],
     "junio": [],
@@ -1597,6 +1698,11 @@
         "dia": 1,
         "nameFestividad": "Fiesta del Trabajo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 31,
+        "nameFestividad": "Día de Castilla-La Mancha",
+        "festividad": "autonomico"
       }
     ],
     "junio": [],
@@ -1679,6 +1785,11 @@
         "dia": 1,
         "nameFestividad": "Fiesta del Trabajo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 31,
+        "nameFestividad": "Día de Castilla-La Mancha",
+        "festividad": "autonomico"
       }
     ],
     "junio": [],
@@ -1776,6 +1887,11 @@
         "dia": 27,
         "nameFestividad": "Corpus Christi",
         "festividad": "local"
+      },
+      {
+        "dia": 31,
+        "nameFestividad": "Día de Castilla-La Mancha",
+        "festividad": "autonomico"
       }
     ],
     "junio": [],
@@ -1846,7 +1962,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -1932,7 +2054,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2019,7 +2147,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2112,7 +2246,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2194,7 +2334,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2282,7 +2428,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2369,7 +2521,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2456,7 +2614,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2543,7 +2707,13 @@
         "festividad": "nacional"
       }
     ],
-    "abril": [],
+    "abril": [
+      {
+        "dia": 23,
+        "nameFestividad": "Día de Castilla y León",
+        "festividad": "autonomico"
+      }
+    ],
     "mayo": [
       {
         "dia": 1,
@@ -2623,6 +2793,11 @@
         "dia": 26,
         "nameFestividad": "Viernes Santo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 29,
+        "nameFestividad": "Lunes de Pascua",
+        "festividad": "autonomico"
       }
     ],
     "abril": [],
@@ -2648,6 +2823,11 @@
       }
     ],
     "septiembre": [
+      {
+        "dia": 11,
+        "nameFestividad": "Fiesta Nacional de Cataluña",
+        "festividad": "autonomico"
+      },
       {
         "dia": 24,
         "nameFestividad": "La Mercè",
@@ -2705,6 +2885,11 @@
         "dia": 26,
         "nameFestividad": "Viernes Santo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 29,
+        "nameFestividad": "Lunes de Pascua",
+        "festividad": "autonomico"
       }
     ],
     "abril": [],
@@ -2730,7 +2915,13 @@
         "festividad": "nacional"
       }
     ],
-    "septiembre": [],
+    "septiembre": [
+      {
+        "dia": 11,
+        "nameFestividad": "Fiesta Nacional de Cataluña",
+        "festividad": "autonomico"
+      }
+    ],
     "octubre": [
       {
         "dia": 12,
@@ -2787,6 +2978,11 @@
         "dia": 26,
         "nameFestividad": "Viernes Santo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 29,
+        "nameFestividad": "Lunes de Pascua",
+        "festividad": "autonomico"
       }
     ],
     "abril": [],
@@ -2812,6 +3008,11 @@
       }
     ],
     "septiembre": [
+      {
+        "dia": 11,
+        "nameFestividad": "Fiesta Nacional de Cataluña",
+        "festividad": "autonomico"
+      },
       {
         "dia": 29,
         "nameFestividad": "San Miguel",
@@ -2869,6 +3070,11 @@
         "dia": 26,
         "nameFestividad": "Viernes Santo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 29,
+        "nameFestividad": "Lunes de Pascua",
+        "festividad": "autonomico"
       }
     ],
     "abril": [],
@@ -2894,6 +3100,11 @@
       }
     ],
     "septiembre": [
+      {
+        "dia": 11,
+        "nameFestividad": "Fiesta Nacional de Cataluña",
+        "festividad": "autonomico"
+      },
       {
         "dia": 23,
         "nameFestividad": "Santa Tecla",
@@ -2987,7 +3198,13 @@
         "festividad": "nacional"
       }
     ],
-    "septiembre": [],
+    "septiembre": [
+      {
+        "dia": 8,
+        "nameFestividad": "Día de Extremadura",
+        "festividad": "autonomico"
+      }
+    ],
     "octubre": [
       {
         "dia": 12,
@@ -3074,7 +3291,13 @@
         "festividad": "nacional"
       }
     ],
-    "septiembre": [],
+    "septiembre": [
+      {
+        "dia": 8,
+        "nameFestividad": "Día de Extremadura",
+        "festividad": "autonomico"
+      }
+    ],
     "octubre": [
       {
         "dia": 12,
@@ -3154,7 +3377,13 @@
         "festividad": "local"
       }
     ],
-    "julio": [],
+    "julio": [
+      {
+        "dia": 25,
+        "nameFestividad": "Día Nacional de Galicia",
+        "festividad": "autonomico"
+      }
+    ],
     "agosto": [
       {
         "dia": 15,
@@ -3236,7 +3465,13 @@
       }
     ],
     "junio": [],
-    "julio": [],
+    "julio": [
+      {
+        "dia": 25,
+        "nameFestividad": "Día Nacional de Galicia",
+        "festividad": "autonomico"
+      }
+    ],
     "agosto": [
       {
         "dia": 15,
@@ -3323,7 +3558,13 @@
       }
     ],
     "junio": [],
-    "julio": [],
+    "julio": [
+      {
+        "dia": 25,
+        "nameFestividad": "Día Nacional de Galicia",
+        "festividad": "autonomico"
+      }
+    ],
     "agosto": [
       {
         "dia": 15,
@@ -3415,6 +3656,11 @@
         "dia": 11,
         "nameFestividad": "San Benito",
         "festividad": "local"
+      },
+      {
+        "dia": 25,
+        "nameFestividad": "Día Nacional de Galicia",
+        "festividad": "autonomico"
       }
     ],
     "agosto": [
@@ -3489,6 +3735,11 @@
         "dia": 1,
         "nameFestividad": "Fiesta del Trabajo",
         "festividad": "nacional"
+      },
+      {
+        "dia": 2,
+        "nameFestividad": "Fiesta de la Comunidad de Madrid",
+        "festividad": "autonomico"
       },
       {
         "dia": 15,
@@ -3582,7 +3833,13 @@
         "festividad": "nacional"
       }
     ],
-    "junio": [],
+    "junio": [
+      {
+        "dia": 9,
+        "nameFestividad": "Día de la Región de Murcia",
+        "festividad": "autonomico"
+      }
+    ],
     "julio": [],
     "agosto": [
       {
@@ -3701,6 +3958,11 @@
     ],
     "diciembre": [
       {
+        "dia": 3,
+        "nameFestividad": "San Francisco Javier / Día de Navarra",
+        "festividad": "autonomico"
+      },
+      {
         "dia": 6,
         "nameFestividad": "Día de la Constitución Española",
         "festividad": "nacional"
@@ -3758,7 +4020,13 @@
       }
     ],
     "junio": [],
-    "julio": [],
+    "julio": [
+      {
+        "dia": 25,
+        "nameFestividad": "Santiago Apóstol",
+        "festividad": "autonomico"
+      }
+    ],
     "agosto": [
       {
         "dia": 5,
@@ -3846,6 +4114,11 @@
     "junio": [],
     "julio": [
       {
+        "dia": 25,
+        "nameFestividad": "Santiago Apóstol",
+        "festividad": "autonomico"
+      },
+      {
         "dia": 31,
         "nameFestividad": "San Ignacio de Loyola",
         "festividad": "local"
@@ -3927,6 +4200,11 @@
     ],
     "junio": [],
     "julio": [
+      {
+        "dia": 25,
+        "nameFestividad": "Santiago Apóstol",
+        "festividad": "autonomico"
+      },
       {
         "dia": 31,
         "nameFestividad": "San Ignacio de Loyola",
@@ -4013,6 +4291,11 @@
       }
     ],
     "junio": [
+      {
+        "dia": 9,
+        "nameFestividad": "Día de La Rioja",
+        "festividad": "autonomico"
+      },
       {
         "dia": 11,
         "nameFestividad": "San Bernabé",
@@ -4124,6 +4407,11 @@
     "septiembre": [],
     "octubre": [
       {
+        "dia": 9,
+        "nameFestividad": "Día de la Comunitat Valenciana",
+        "festividad": "autonomico"
+      },
+      {
         "dia": 12,
         "nameFestividad": "Fiesta Nacional de España",
         "festividad": "nacional"
@@ -4210,6 +4498,11 @@
     ],
     "septiembre": [],
     "octubre": [
+      {
+        "dia": 9,
+        "nameFestividad": "Día de la Comunitat Valenciana",
+        "festividad": "autonomico"
+      },
       {
         "dia": 12,
         "nameFestividad": "Fiesta Nacional de España",
@@ -4298,6 +4591,11 @@
     "septiembre": [],
     "octubre": [
       {
+        "dia": 9,
+        "nameFestividad": "Día de la Comunitat Valenciana",
+        "festividad": "autonomico"
+      },
+      {
         "dia": 12,
         "nameFestividad": "Fiesta Nacional de España",
         "festividad": "nacional"
@@ -4382,7 +4680,13 @@
         "festividad": "nacional"
       }
     ],
-    "septiembre": [],
+    "septiembre": [
+      {
+        "dia": 2,
+        "nameFestividad": "Día de Ceuta",
+        "festividad": "autonomico"
+      }
+    ],
     "octubre": [
       {
         "dia": 12,
@@ -4466,6 +4770,11 @@
       },
       {
         "dia": 17,
+        "nameFestividad": "Día de Melilla",
+        "festividad": "autonomico"
+      },
+      {
+        "dia": 18,
         "nameFestividad": "Día de Melilla",
         "festividad": "local"
       }
